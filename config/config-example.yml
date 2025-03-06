@@ -1,6 +1,12 @@
 jellyfin:
   url: ""
   api_token: ""
+  watched_film_folders:
+    - ""
+  watched_tv_folders:
+    - ""
+  
+  observed_period_days: 30
 
 tmdb:
   api_key: ""
