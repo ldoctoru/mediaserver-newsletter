@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouvelle Arrivée sur Jellyfin</title>
+    <style>
+        body {
+            background: #000011;
+            color: white;
+            font-family: Arial, sans-serif;
+            
+            padding: 50px;
+        }
+        .container {
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        h1 {
+            color: #00ccff;
+        }
+        p {
+            font-size: 18px;
+        }
+        .button {
+            background-color: #00ccff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0099cc;
+        }
+
+        .title {
+            text-align: center;
+            width:100%;
+        }
+
+        #movies {
+            display: flex;
+            flex-direction: column;
+            justify-items: center;
+            width: 90vw;
+        }
+
+        .movie_container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .movie_bg {
+            border: white 0.5px solid;
+            border-radius: 15px;
+            
+            margin: 10px;
+            
+            width: 70%;
+        }
+
+        .movie {
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.2); 
+            backdrop-filter: blur(20px);
+        }
+
+        .movie .img img {
+            height: 150px;
+            width: auto;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container title">
+        <div>
+        <h1>Nouveaux films et Séries disponibles sur Jellyfin</h1>
+        <p>Résumé de tous les films et toutes les séries qui ont été ajoutés à Jellyfin au cours des 30 derniers jours.</p>
+        <br>
+        <a href="http://netflix.klock" class="button">Découvrir Maintenant</a>
+    </div>
+    </div>
+    <br>
+    <div class="container">
+        <h2>Nouveaux films :</h2>
+        <div id="movies">
+            <div class="movie_container">
+            <div class="movie_bg" style="background: url(https://image.tmdb.org/t/p/w300/6akNNv4KyrguZUiG4uemfV6toVq.jpg) no-repeat; background-size: cover; background-position-y: center; ">
+                <div class="movie" >
+                <div class="img">
+                    <img src="https://image.tmdb.org/t/p/w300/6akNNv4KyrguZUiG4uemfV6toVq.jpg" alt="Image du film" >
+                </div>
+                <div class="info">
+                    <h3>Titre du film</h3>
+                    <p>Résumé du film</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        
+
+        </div>
+
+
+    </div>
+</body>
+</html>
