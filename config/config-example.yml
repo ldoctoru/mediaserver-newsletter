@@ -1,0 +1,6 @@
+jellyfin:
+  url: ""
+  api_token: ""
+
+tmdb:
+  api_key: ""
