@@ -31,7 +31,7 @@ def get_media_detail_from_title(title, type, year=None):
             if result["popularity"] > max_popularity:
                 max_popularity = result["popularity"]
                 best_result = result
-        logging.info(f"Returning the best result. Movie id {best_result["id"]} has been selected based on popularity.")
+        logging.info(f"Returning the best result. Movie id {best_result['id']} has been selected based on popularity.")
         return best_result
     else:
         logging.error(f"Error, no result found for the title {title}.")
