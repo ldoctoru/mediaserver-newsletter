@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle Arrivée sur Jellyfin</title>
     <style>
         body {
             background: #000011;
             color: white;
             font-family: Arial, sans-serif;
-            
-            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            align-content: center;
         }
         .container {
-            padding: 20px;
+       
             border-radius: 10px;
             display: inline-block;
+            width:100%;
         }
         h1 {
             color: #00ccff;
@@ -38,13 +40,17 @@
         .title {
             text-align: center;
             width:100%;
+            margin-bottom: 20px;
         }
 
-        #movies {
+        .title a {
+            color:white;
+        }
+
+        #movies, #tvs{
             display: flex;
             flex-direction: column;
             justify-items: center;
-            width: 90vw;
         }
 
         .movie_container {
@@ -59,7 +65,8 @@
             
             margin: 10px;
             
-            width: 70%;
+            min-width: 70%;
+            max-width: 90%;
         }
 
         .movie {
@@ -71,9 +78,26 @@
             backdrop-filter: blur(20px);
         }
 
+        .movie h3 {
+            font-size: x-large;
+            margin-bottom: 2px;
+        }
+
+        .movie .description {
+            margin-top: 10px;
+            font-size:small;
+        }
+
+        .img{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .movie .img img {
-            height: 150px;
-            width: auto;
+            height: 100px;
+            width: auto !important;
+            min-width: 70px;
             padding: 10px;
         }
 
@@ -81,7 +105,6 @@
             display: flex;
             flex-direction: row;
             justify-content: center;
-            width: 90vw;
         }
         
         .total {
@@ -89,12 +112,31 @@
             flex-direction: row;
             justify-content: space-between;
             width: 50vw;
+            text-align: center;
         }
 
         .total_title {
-            border-top: white 0.3px solid;
+            border-top: lightgray 0.3px solid;
             text-align: center;
             margin-top: 50px;
+        }
+
+        .container h2 {
+            margin-left: 10px;
+        }
+
+        .added {
+            color:lightgray;
+            font-weight: lighter;
+            
+        }
+
+        footer {
+            margin-top: 50px;
+            padding-top:10px;
+            border-top: lightgray 0.3px solid;
+            text-align: center;
+            font-size: smaller;
         }
 
 
@@ -103,52 +145,29 @@
 <body>
     <div class="container title">
         <div>
-        <h1>Nouveaux films et Séries disponibles sur Jellyfin</h1>
-        <p>Résumé de tous les films et toutes les séries qui ont été ajoutés à Jellyfin au cours des 30 derniers jours.</p>
+        <h1>${title}</h1>
+        <p>${subtitle}</p>
         <br>
-        <a href="http://netflix.klock" class="button">Découvrir Maintenant</a>
+        <a href="${jellyfin_url}" class="button">${discover_now}</a>
     </div>
     </div>
     <br>
-    <div class="container">
-        <h2>Nouveaux films :</h2>
+    <div class="container"  style="${display_movies}">
+        <h2>${new_film}</h2>
         <div id="movies">
-            <div class="movie_container">
-            <div class="movie_bg" style="background: url(https://image.tmdb.org/t/p/w300/6akNNv4KyrguZUiG4uemfV6toVq.jpg) no-repeat; background-size: cover; background-position-y: center; ">
-                <div class="movie" >
-                <div class="img">
-                    <img src="https://image.tmdb.org/t/p/w300/6akNNv4KyrguZUiG4uemfV6toVq.jpg" alt="Image du film" >
-                </div>
-                <div class="info">
-                    <h3>Titre du film</h3>
-                    <p>Résumé du film</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+            ${films}
+            
+        
         </div>
         
 
         </div>
 
 
-        <div class="container">
-            <h2>Nouvelles Séries :</h2>
-            <div id="movies">
-                <div class="movie_container">
-                <div class="movie_bg" style="background: url(https://media.themoviedb.org/t/p/w440_and_h660_face/alaRcixeZ1lLVb5NuvmJnAsfbyA.jpg) no-repeat; background-size: cover; background-position-y: center; ">
-                    <div class="movie" >
-                    <div class="img">
-                        <img src="https://media.themoviedb.org/t/p/w440_and_h660_face/alaRcixeZ1lLVb5NuvmJnAsfbyA.jpg
-                        " alt="Image du film" >
-                    </div>
-                    <div class="info">
-                        <h3>Titre du film</h3>
-                        <p>Résumé du film</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="container" style="${display_tv}">
+            <h2>${new_tvs}</h2>
+            <div id="tvs">
+               ${tvs}
             </div>
             
     
@@ -156,18 +175,18 @@
 
 
         <div class="total_title">
-            <h2>Actuellement disponible sur Jellyfin : </h2>
+            <h2>${currently_available} </h2>
 
         </div>
 
         <div class="total_container">
     <div class="total">
         <div class="films">
-            <h1>15</h1><p>films</p>
+            <h1>${movies_count}</h1><p>${movies_label}</p>
 
             </div>
         <div class="series">
-            <h1>1000</h1><p>épisodes</p>
+            <h1>${series_count}</h1><p>${episodes_label}</p>
             </div>
 
         </div>
@@ -175,5 +194,9 @@
 
 
     </div>
+
+    <footer>
+        ${footer_label}
+    </footer>
 </body>
 </html>
