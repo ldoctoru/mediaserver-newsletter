@@ -21,11 +21,39 @@ class Tmdb:
             if key not in data:
                 raise Exception(f"[FATAL] Load config fail. Was expecting the key tmdb.{key}")
         self.api_key = data["api_key"]
-       
+
+class EmailTemplate:
+    required_keys= ["language","subject","title","subtitle","jellyfin_url","unsubscribe_email","jellyfin_owner_name"]
+    def __init__(self, data):
+        for key in self.required_keys:
+            if key not in data:
+                raise Exception(f"[FATAL] Load config fail. Was expecting the key email_template.{key}")
+
+        self.language = data["language"]
+        self.subject = data["subject"]
+        self.title = data["title"]
+        self.subtitle = data["subtitle"]
+        self.jellyfin_url = data["jellyfin_url"]
+        self.unsubscribe_email = data["unsubscribe_email"]
+        self.jellyfin_owner_name = data["jellyfin_owner_name"]
+
+
+class Email:
+    required_keys=["smtp_server", "smtp_port", "smtp_username", "smtp_password", "smtp_sender_email"]
+    def __init__(self, data):
+        for key in self.required_keys:
+            if key not in data:
+                raise Exception(f"[FATAL] Load config fail. Was expecting the key email.{key}")
+        self.smtp_server = data["smtp_server"]
+        self.smtp_port = data["smtp_port"]
+        self.smtp_user = data["smtp_username"]
+        self.smtp_password = data["smtp_password"]
+        self.smtp_sender_email = data["smtp_sender_email"]
+
         
 
 class Config:
-    required_keys = ["jellyfin", "tmdb"]
+    required_keys = ["jellyfin", "tmdb", "email_template", "email", "recipients"]
     def __init__(self, data):
         for key in self.required_keys:
             if key not in data:
@@ -34,6 +62,9 @@ class Config:
     
         self.jellyfin = Jellyfin(data["jellyfin"])
         self.tmdb = Tmdb(data["tmdb"])
+        self.email_template = EmailTemplate(data["email_template"])
+        self.email = Email(data["email"])
+        self.recipients = data["recipients"]
     
     
 
