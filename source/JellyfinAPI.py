@@ -28,11 +28,11 @@ def get_item_from_parent(parent_id, type, minimum_creation_date=None):
     
     
     if not minimum_creation_date:
-        return response.json()["Items"]
+        return response.json()["Items"], response.json()["TotalRecordCount"]
     else:
         recent_items = []
         for item in response.json()["Items"]:
             creation_date = dt.datetime.strptime(item["DateCreated"].split("T")[0], "%Y-%m-%d")
             if creation_date > minimum_creation_date:
                 recent_items.append(item)
-        return recent_items
+        return recent_items, response.json()["TotalRecordCount"]
