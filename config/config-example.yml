@@ -10,3 +10,24 @@ jellyfin:
 
 tmdb:
   api_key: ""
+
+
+email_template:
+  language: "en"
+  subject: ""
+  title: ""
+  subtitle: ""
+  jellyfin_url: ""
+  unsubscribe_email: ""
+  jellyfin_owner_name: ""
+
+
+email:
+  smtp_server: ""
+  smtp_port: 
+  smtp_username: ""
+  smtp_password: ""
+  smtp_sender_email: ""
+
+recipients:
+  - ""
