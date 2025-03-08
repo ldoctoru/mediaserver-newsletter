@@ -63,9 +63,9 @@ if __name__ == "__main__":
     
     template = email_template.populate_email_template(movies=movie_items, series=series_items, total_tv=total_tv, total_movie=total_movie)
 
-    print(template)
+    #print(template)
 
-    #email_controller.send_email(template)
+    email_controller.send_email(template)
 
     print("\n\n##############################################")
     print("All done here. Exiting.")

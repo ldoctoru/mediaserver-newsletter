@@ -51,17 +51,19 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                 movies_html += f"""
                 <div class="movie_container">
             <div class="movie_bg" style="background: url({movies[movie_title]["poster"]}) no-repeat; background-size: cover; background-position-y: center; ">
-                <div class="movie" >
-                <div class="img">
+                <table class="movie" >
+                <tr>
+                <td class="img">
                     <img src="{movies[movie_title]["poster"]}" alt="Image du film" >
-                </div>
-                <div class="info">
+                </td>
+                <td class="info">
                     <h3>{movie_title}</h3>
                     <span class="added">{translation[configuration.conf.email_template.language]["added_on"]} {movies[movie_title]["created_on"].split("T")[0]} </span>
                     <p class="description">{movies[movie_title]["description"]}</p>
                         
-                    </div>
-                </div>
+                    </td>
+                    <tr>
+                </table>
             </div>
         </div>
         """
@@ -77,17 +79,19 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                 series_html += f"""
                 <div class="movie_container">
             <div class="movie_bg" style="background: url({series[serie_title]["poster"]}) no-repeat; background-size: cover; background-position-y: center; ">
-                <div class="movie" >
-                <div class="img">
+                <table class="movie" >
+                <tr>
+                <td class="img">
                     <img src="{series[serie_title]["poster"]}" alt="Image du film" >
-                </div>
-                <div class="info">
+                </td>
+                <td class="info">
                     <h3>{serie_title} {", ".join(series[serie_title]["seasons"])}</h3>
                     <span class="added">{translation[configuration.conf.email_template.language]["added_on"]} {series[serie_title]["created_on"].split("T")[0]} </span>
                     <p class="description">{series[serie_title]["description"]}</p>
                         
-                    </div>
-                </div>
+                    </td>
+                    </tr>
+                </table>
             </div>
         </div>
         """
