@@ -27,8 +27,8 @@ It is fully customizable and can be run on a schedule using a cron job or a task
 ## Installation
 ### Requirements
 - Python 3.9+ 
-- Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#requirements)
-- A TMDB API key (free) - [How to generate a TMDB API key]()
+- Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-jellyfin-api-key)
+- A TMDB API key (free) - [How to generate a TMDB API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-tmdb-api-key)
 - A SMTP server 
 
 ### Installation and setup
