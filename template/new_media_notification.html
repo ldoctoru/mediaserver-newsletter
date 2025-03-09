@@ -44,6 +44,8 @@
             color:white;
         }
 
+        .foo
+
         #movies, #tvs{
             width: 100vw;
             border-collapse: collapse;
@@ -70,6 +72,7 @@
             background: rgba(0, 0, 0, 0.7); 
             backdrop-filter: blur(20px);
             color: white;
+            width: 100%;
         }
 
         .movie h3 {
@@ -126,6 +129,14 @@
             border-top: lightgray 0.3px solid;
             text-align: center;
             font-size: smaller;
+        }
+
+        .ack {
+            font-size: smaller;
+        }
+        .ack a, .ack a:visited {
+            color: white;
+            text-decoration: underline;
         }
 
 
@@ -187,7 +198,8 @@
     </div>
 
     <footer>
-        ${footer_label}
+        ${footer_label}<br><br>
+        <p class="ack"><a href="https://github.com/SeaweedbrainCY/jellyfin-newsletter">Jellyfin Newsletter</a> an open source project. Developed with ❤️ by <a href="https://github.com/SeaweedbrainCY/">Seaweedbrain</a></p>
     </footer>
 </body>
 </html>
