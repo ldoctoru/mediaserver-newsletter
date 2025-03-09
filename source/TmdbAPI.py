@@ -11,7 +11,12 @@ def get_media_detail_from_title(title, type, year=None):
     if type not in ["movie", "tv"]:
         logging.error(f"Error while retrieving a media from TMDB. Type must be 'movie' or 'tv'. Got {type}")
         return None
-    url = f"https://api.themoviedb.org/3/search/{type}?query={title}&language=fr-fr{year_query}"
+    lang = "en-us" 
+    if configuration.conf.email_template.language == "fr":
+        lang = "fr-fr"
+    else:
+        lang = "en-us"
+    url = f"https://api.themoviedb.org/3/search/{type}?query={title}&language={lang}{year_query}"
 
     headers = {
         "accept": "application/json",
@@ -24,7 +29,7 @@ def get_media_detail_from_title(title, type, year=None):
     if response.json()["total_results"] == 1:
         return response.json()["results"][0]
     elif response.json()["total_results"] > 1:
-        logging.warning(f"Warning, multiple results found for the title {title}.")
+        logging.warning(f"Warning, multiple results found for the title {title}. Selecting the best one based on popularity.")
         max_popularity = 0
         best_result = None
         for result in response.json()["results"]:
