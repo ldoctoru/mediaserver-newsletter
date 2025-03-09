@@ -27,7 +27,7 @@ It is fully customizable and can be run on a schedule using a cron job or a task
 ## Installation
 ### Requirements
 - Python 3.9+ 
-- Jellyfin API key - [How to generate an API key]()
+- Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#requirements)
 - A TMDB API key (free) - [How to generate a TMDB API key]()
 - A SMTP server 
 
@@ -138,3 +138,21 @@ Feel free to contribute to this project by opening an issue or a pull request.
 If you like this project, consider giving it a ⭐️.
 
 If you encounter any issues, please let me know by opening an issue.
+
+## How to 
+### How to generate a Jellyfin API key
+1. Go to your Jellyfin dashboard
+2. Scroll to advanced section and click on API keys
+3. Click on the `+` button to create a new API key
+4. Fill in the required fields and click on save
+5. Copy the generated API key
+6. Paste it in the `config.yml` file under `jellyfin.api_token`
+
+### How to generate a TMDB API key
+1. Go to the [TMDB website](https://www.themoviedb.org/)
+2. Create an account or log in
+3. Go to your account settings
+4. Click on the API section
+5. Click on the `Create` button to create a new API key
+6. Copy the API key named "API Read Access Token"
+7. Paste it in the `config.yml` file under `tmdb.api_key`
