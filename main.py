@@ -59,7 +59,6 @@ if __name__ == "__main__":
                         series_items[item['SeriesName']]["poster"] = f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
                     else:
                         series_items[item['SeriesName']]["seasons"].append(item["SeasonName"])
-    print(series_items)
     
     template = email_template.populate_email_template(movies=movie_items, series=series_items, total_tv=total_tv, total_movie=total_movie)
 
