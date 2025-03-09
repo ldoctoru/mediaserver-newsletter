@@ -1,6 +1,6 @@
 # Jellyfin Newsletter - Your recent additions in your users' inbox
 
-<p style="text-align:center">
+<p align="center">
 <img src="https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/assets/jellyfin_newsletter.png" width=100>
 </p>
 
@@ -9,7 +9,7 @@ A simple newsletter python script for Jellyfin to notify your users of your last
 It is fully customizable and can be run on a schedule using a cron job or a task scheduler.
 
 ## What it looks like ? 
-<p style="text-align:center">
+<p align="center">
 <img src="https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/assets/new_media_notification_preview.png" width=500>
 </p>
 
