@@ -24,7 +24,99 @@ It is fully customizable and can be run on a schedule using a cron job or a task
 - Configure the list of recipients
 - Configure specific folders to watch for new items
 
-## Installation
+## Installation (docker) (recommended ⭐)
+### Requirements
+
+- Docker 
+- Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-jellyfin-api-key)
+- A TMDB API key (free) - [How to generate a TMDB API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-tmdb-api-key)
+- A SMTP server 
+
+### Configuration
+1. Download the [config file](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml) :
+```
+curl -o config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml
+```
+2. Edit the `config.yml` file and fill in the required fields. **All fields are required**.
+```yaml
+jellyfin:
+    # URL of your jellyfin server
+    url: "" 
+
+    # API token of your jellyfin server. See requirements for more info
+    api_token: ""
+
+    # List of folders to watch for new movies. 
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    watched_film_folders:
+        - ""
+        # example for /movies folder add "movies"
+
+
+    # List of folders to watch for new movies. 
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    watched_tv_folders:
+        - ""
+        # example for /movies folder add "movies"
+  
+  # Number of days to look back for new items
+  observed_period_days: 30
+
+tmdb:
+    # TMDB API key. See requirements for more info.
+    api_key: ""
+
+# Email template to use for the newsletter
+email_template:
+    # Language of the email. Supported languages are "en" and "fr".
+    language: "en"
+    # Subject of the email
+    subject: ""
+    # Title of the email
+    title: ""
+    # Subtitle of the email
+    subtitle: ""
+    # Will be used to redirect the user to your Jellyfin instance
+    jellyfin_url: ""
+    # Used in the footer. This is a legal notice.
+    unsubscribe_email: ""
+    # Used in the footer
+    jellyfin_owner_name: ""
+
+
+email:
+    # SMTP server configuration. TLS is required for now.
+    smtp_server: ""
+    smtp_port: 
+    smtp_username: ""
+    smtp_password: ""
+    smtp_sender_email: ""
+
+
+# List of users to send the newsletter to.
+recipients:
+  - ""
+  # Example : "fname@email.com" or "fname <fname@email.com">
+```
+
+3. Run the docker container 
+```bash
+docker run --rm \
+    -v $(pwd)/config.yml:/app/config/config.yml \
+    ghcr.io/seaweedbraincy/jellyfin-newsletter:latest
+```
+*Note : It is recommended to use a static version instead of  `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/pkgs/container/jellyfin-newsletter)*
+
+4. (Optional) Schedule the script to run on a regular basis. 
+```bash
+# Unix :
+crontab -e
+# Add the following line to run the script every 1st of the month at 8am
+0 8 1 * * root docker run --rm -v $(pwd)/config.yml:/app/config/config.yml ghcr.io/seaweedbraincy/jellyfin-newsletter:latest
+```
+*Note : It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/pkgs/container/jellyfin-newsletter)*
+
+## Installation (manual)
 ### Requirements
 - Python 3.9+ 
 - Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-jellyfin-api-key)
@@ -120,7 +212,7 @@ python main.py
 # Unix :
 crontab -e
 # Add the following line to run the script every 1st of the month at 8am
-0 8 1 * * /path/to/project/venv/bin/python /path/to/main.py
+0 8 1 * * root /path/to/project/venv/bin/python /path/to/main.py
 ```
 
 ## Current limitations
