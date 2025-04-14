@@ -8,7 +8,7 @@ on:
 
 
 jobs:
-    Build and publish image:
+    build_and_publish :
       name: Build and publish image
       runs-on: ubuntu-latest
       env:
