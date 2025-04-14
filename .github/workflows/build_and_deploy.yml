@@ -20,7 +20,7 @@ jobs:
           run: |
             current_version=$(echo ${{ github.ref_name }} | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/')
             current_short_version=$(echo ${{ github.ref_name }} | sed 's/\([0-9]*\.[0-9]*\).*$/\1/')
-            docker build -t $DOCKER_IMAGE_NAME:latest -t $DOCKER_IMAGE_NAME:$current_version .
+            docker build -t $DOCKER_IMAGE_NAME:latest -t $DOCKER_IMAGE_NAME:$current_version -t $DOCKER_IMAGE_NAME:$current_short_version .
         - name: Login to GitHub Container Registry
           run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.USERNAME }} --password-stdin
         - name: Push Docker image to GitHub Container Registry
