@@ -8,7 +8,7 @@ import logging
 
 
 if __name__ == "__main__":
-    print("Welcome to jellyfin automatic newsletter !\n")
+    print("Thanks for using jellyfin automatic newsletter !\n")
     print("Developped by Seaweedbrain, under MIT License.")
     print("##############################################\n\n")
 
@@ -39,12 +39,14 @@ if __name__ == "__main__":
             if "DateCreated" not in item.keys():
                 logging.warning(f"Item {item['Name']} has no creation date.")
                 item["DateCreated"] = None
-            if "Overview" not in item.keys():
-                logging.warning(f"Item {item['Name']} has no overview.")
-                item["Overview"] = "No overview available."
+            
 
 
             tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["Name"], type="movie", year=item["ProductionYear"])
+
+            if "overview" not in tmdb_info.keys():
+                logging.warning(f"Item {item['Name']} has no overview.")
+                tmdb_info["overview"] = "No overview available."
 
             movie_items[item["Name"]] = {
                 "year":item["ProductionYear"],
