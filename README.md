@@ -1,6 +1,12 @@
 # Jellyfin Newsletter - Your recent additions in your users' inbox
 
 <p align="center">
+<img src="https://github.com/SeaweedbrainCY/jellyfin-newsletter/actions/workflows/build_and_deploy.yml/badge.svg?branch="/>
+ <img src="https://img.shields.io/github/license/seaweedbraincy/jellyfin-newsletter"/>
+<img src="https://img.shields.io/github/v/release/seaweedbraincy/jellyfin-newsletter"/>
+</p>
+
+<p align="center">
 <img src="https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/assets/jellyfin_newsletter.png" width=100>
 </p>
 
