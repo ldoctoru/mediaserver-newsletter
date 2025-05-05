@@ -108,7 +108,7 @@ recipients:
 3. Run the docker container 
 ```bash
 docker run --rm \
-    -v $(pwd)/config.yml:/app/config/config.yml \
+    -v ./config.yml:/app/config/config.yml \
     ghcr.io/seaweedbraincy/jellyfin-newsletter:latest
 ```
 *Note : It is recommended to use a static version instead of  `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/pkgs/container/jellyfin-newsletter)*
