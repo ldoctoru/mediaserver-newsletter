@@ -22,10 +22,9 @@ def get_item_from_parent(parent_id, type, minimum_creation_date=None):
 
 
 
-    response = requests.get(f'{configuration.conf.jellyfin.url}/Items?ParentId={parent_id}&fields=DateCreated&Recursive=true', headers=headers)
+    response = requests.get(f'{configuration.conf.jellyfin.url}/Items?ParentId={parent_id}&fields=DateCreated,ProviderIds&Recursive=true', headers=headers)
     if response.status_code != 200:
         raise Exception(f"Error while getting the items from parent, status code: {response.status_code}. Answer: {response.json()}.")
-    
     
     if not minimum_creation_date:
         return response.json()["Items"], response.json()["TotalRecordCount"]

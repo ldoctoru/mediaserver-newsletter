@@ -43,17 +43,19 @@ if __name__ == "__main__":
 
 
             tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["Name"], type="movie", year=item["ProductionYear"])
+            if tmdb_info is None:
+                logging.warning(f"Item {item['Name']} has not been found on TMDB. Skipping.")
+            else:
+                if "overview" not in tmdb_info.keys():
+                    logging.warning(f"Item {item['Name']} has no overview.")
+                    tmdb_info["overview"] = "No overview available."
 
-            if "overview" not in tmdb_info.keys():
-                logging.warning(f"Item {item['Name']} has no overview.")
-                tmdb_info["overview"] = "No overview available."
-
-            movie_items[item["Name"]] = {
-                "year":item["ProductionYear"],
-                "created_on":item["DateCreated"],
-                "description": tmdb_info["overview"],
-                "poster": f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
-            }
+                movie_items[item["Name"]] = {
+                    "year":item["ProductionYear"],
+                    "created_on":item["DateCreated"],
+                    "description": tmdb_info["overview"],
+                    "poster": f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
+                }
             
     
     for folder_id in watched_tv_folders_id:
@@ -71,25 +73,28 @@ if __name__ == "__main__":
                             logging.warning(f"Item {item['SeriesName']} has no production year.")
                             item["ProductionYear"] = 0
                         
-                        series_items[item['SeriesName']] = {
-                        "seasons": [item["SeasonName"]] if item["SeasonName"] else [],
-                        "created_on": item["DateCreated"],
-                        }
+                        
                         tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["SeriesName"], type="tv", year=item["ProductionYear"])
-                        if "overview" not in tmdb_info.keys():
-                            logging.warning(f"Item {item['SeriesName']} has no overview.")
-                            tmdb_info["Overview"] = "No overview available."
-                        series_items[item['SeriesName']]["description"] = tmdb_info["overview"] 
-                        series_items[item['SeriesName']]["year"] = item["ProductionYear"]
-                        series_items[item['SeriesName']]["poster"] = f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
+                        if tmdb_info is None:
+                            logging.warning(f"Item {item['Name']} has not been found on TMDB. Skipping.")
+                        else:
+                            series_items[item['SeriesName']] = {
+                                "seasons": [item["SeasonName"]] if item["SeasonName"] else [],
+                                "created_on": item["DateCreated"],
+                                }
+                            if "overview" not in tmdb_info.keys():
+                                logging.warning(f"Item {item['SeriesName']} has no overview.")
+                                tmdb_info["Overview"] = "No overview available."
+                            series_items[item['SeriesName']]["description"] = tmdb_info["overview"] 
+                            series_items[item['SeriesName']]["year"] = item["ProductionYear"]
+                            series_items[item['SeriesName']]["poster"] = f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
                     else:
                         series_items[item['SeriesName']]["seasons"].append(item["SeasonName"])
     
     template = email_template.populate_email_template(movies=movie_items, series=series_items, total_tv=total_tv, total_movie=total_movie)
 
-    #print(template)
 
-    email_controller.send_email(template)
+    #email_controller.send_email(template)
 
     print("\n\n##############################################")
     print("All done here. Exiting.")
