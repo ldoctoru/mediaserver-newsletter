@@ -2,7 +2,7 @@ from source import configuration
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-import logging
+from source.configuration import logging
 
 
 
