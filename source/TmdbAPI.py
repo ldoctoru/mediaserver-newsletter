@@ -1,8 +1,7 @@
 import requests
 from source import configuration 
 import json
-import logging
-
+from source.configuration import logging
 
 
 
@@ -41,3 +40,24 @@ def get_media_detail_from_title(title, type, year=None):
     else:
         logging.error(f"Error, no result found for the title {title}.")
         return None
+
+
+def get_media_detail_from_id(id, type):
+    if type not in ["movie", "tv"]:
+        logging.error(f"Error while retrieving a media from TMDB. Type must be 'movie' or 'tv'. Got {type}")
+        return None
+    lang = "en-us" 
+    if configuration.conf.email_template.language == "fr":
+        lang = "fr-fr"
+    else:
+        lang = "en-us"
+    url= f"https://api.themoviedb.org/3/{type}/{id}?language={lang}"
+    headers = {
+        "accept": "application/json",
+        "Authorization": f"Bearer {configuration.conf.tmdb.api_key}"
+    }
+
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        raise Exception(f"Error while getting the token, status code: {response.status_code}. Answer: {response.json()}.")
+    return response.json()

@@ -1,8 +1,7 @@
 import sys 
 from source import configuration, JellyfinAPI, TmdbAPI, email_template, email_controller
 import datetime as dt
-import logging
-
+from source.configuration import logging
 
 
 
@@ -33,16 +32,25 @@ if __name__ == "__main__":
         items, total_count = JellyfinAPI.get_item_from_parent(parent_id=folder_id,type="movie", minimum_creation_date=dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days))
         total_movie += total_count
         for item in items:
+            tmdb_id = None
             if "ProductionYear"  not in item.keys():
                 logging.warning(f"Item {item['Name']} has no production year.")
                 item["ProductionYear"] = 0
             if "DateCreated" not in item.keys():
                 logging.warning(f"Item {item['Name']} has no creation date.")
                 item["DateCreated"] = None
+            if "ProviderIds" in item.keys():
+                print(item['Name'], item["ProviderIds"])
+                if "tmdb" in item["ProviderIds"].keys():
+                    tmdb_id = item["ProviderIds"]["tmdb"]
             
+            
+            if tmdb_id: # id provided by Jellyfin
+                tmdb_info = TmdbAPI.get_media_detail_from_id(id=tmdb_id, type="movie")
+            else:
+                logging.info(f"Item {item['Name']} has no TMDB id, searching by title.")
+                tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["Name"], type="movie", year=item["ProductionYear"])
 
-
-            tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["Name"], type="movie", year=item["ProductionYear"])
             if tmdb_info is None:
                 logging.warning(f"Item {item['Name']} has not been found on TMDB. Skipping.")
             else:
@@ -73,8 +81,16 @@ if __name__ == "__main__":
                             logging.warning(f"Item {item['SeriesName']} has no production year.")
                             item["ProductionYear"] = 0
                         
+                        tmdb_id = None
+                        if "ProviderIds" in item.keys():
+                            if "tmdb" in item["ProviderIds"].keys():
+                                tmdb_id = item["ProviderIds"]["tmdb"]
                         
-                        tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["SeriesName"], type="tv", year=item["ProductionYear"])
+                        if tmdb_id: # id provided by Jellyfin
+                            tmdb_info = TmdbAPI.get_media_detail_from_id(id=tmdb_id, type="tv")
+                        else:
+                            logging.info(f"Item {item['SeriesName']} has no TMDB id, searching by title.")
+                            tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["SeriesName"], type="tv", year=item["ProductionYear"])
                         if tmdb_info is None:
                             logging.warning(f"Item {item['Name']} has not been found on TMDB. Skipping.")
                         else:
