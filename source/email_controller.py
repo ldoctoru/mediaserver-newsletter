@@ -24,6 +24,6 @@ def send_email(html_content):
         msg.attach(part)
         msg['To'] = recipient
         smtp_server.sendmail(configuration.conf.email.smtp_sender_email, recipient, msg.as_string())
-        logging.info("Email sent to ", recipient)
+        logging.info(f"Email sent to {recipient}")
     smtp_server.quit()
     
