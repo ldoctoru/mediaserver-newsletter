@@ -44,5 +44,6 @@ def get_item_from_parent_by_name(parent_id, name):
     if response.status_code != 200:
         raise Exception(f"Error while getting the items from parent, status code: {response.status_code}. Answer: {response.json()}.")
     for item in response.json()["Items"]:
-        if item["Name"] == name:
-            return item
+        if "Name" in item.keys():
+            if item["Name"] == name:
+                return item
