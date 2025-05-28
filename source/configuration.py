@@ -1,6 +1,12 @@
 import yaml
 import logging
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+
 class Jellyfin:
     required_keys = ["url", "api_token",  "watched_film_folders", "watched_tv_folders", "observed_period_days"]
     def __init__(self, data):

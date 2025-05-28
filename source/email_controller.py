@@ -2,6 +2,7 @@ from source import configuration
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from source.configuration import logging
 
 
 
@@ -23,6 +24,6 @@ def send_email(html_content):
         msg.attach(part)
         msg['To'] = recipient
         smtp_server.sendmail(configuration.conf.email.smtp_sender_email, recipient, msg.as_string())
-        print("Email sent to ", recipient)
+        logging.info(f"Email sent to {recipient}")
     smtp_server.quit()
     
