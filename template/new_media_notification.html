@@ -117,8 +117,9 @@
             line-height: 1.4 !important;
             color: #dddddd !important;
             word-wrap: break-word !important;
-            overflow-wrap: anywhere !important;
+            overflow-wrap: break-word !important;
             max-width: 100% !important;
+            word-break: break-word !important;
             hyphens: auto !important;
         }
         
@@ -202,12 +203,38 @@
                 font-size: 13px !important;
                 word-break: break-word !important;
                 overflow-wrap: break-word !important;
+                -webkit-hyphens: auto !important;
+                -ms-hyphens: auto !important;
+                hyphens: auto !important;
             }
             .main-table {
                 width: 100% !important;
             }
             .content-cell {
                 padding: 10px !important;
+            }
+            /* Gmail mobile-specific fix */
+            .movie-card table {
+                min-width: 100% !important;
+                width: 100% !important;
+            }
+            .movie-card td {
+                display: block !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .movie-card .movie-image {
+                text-align: center !important;
+                padding-bottom: 0 !important;
+            }
+            .movie-card .movie-image img {
+                margin: 0 auto 10px !important;
+            }
+            .movie-card .movie-content {
+                padding-top: 0 !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
             }
         }
     </style>

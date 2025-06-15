@@ -60,15 +60,15 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                 <div class="movie-card">
                     <table width="100%" role="presentation" cellpadding="0" cellspacing="0" style="table-layout: fixed; width: 100%;">
                         <tr>
-                            <td class="movie-image" width="120" style="vertical-align: middle; padding: 10px; width: 120px;">
+                            <td class="movie-image" width="120" style="vertical-align: middle; padding: 10px; width: 120px; display: inline-block; max-width: 120px;">
                                 <img src="{movie_data['poster']}" alt="{movie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
                             </td>
-                            <td class="movie-content" style="vertical-align: top; padding: 10px 15px; word-wrap: break-word; width: 100%;">
-                                <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
-                                <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
+                            <td class="movie-content" style="vertical-align: top; padding: 10px 15px; display: inline-block; width: 100%; max-width: 100%; box-sizing: border-box; word-wrap: break-word; word-break: break-word;">
+                                <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important; word-break: break-word;">{movie_title}</h3>
+                                <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important; word-break: break-word;">
                                     {translation[configuration.conf.email_template.language]['added_on']} {added_date}
                                 </div>
-                                <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important; word-wrap: break-word !important; overflow-wrap: anywhere !important; hyphens: auto !important; max-width: 100% !important;">
+                                <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important; word-wrap: break-word !important; word-break: break-word !important; overflow-wrap: break-word !important; hyphens: auto !important; max-width: 100% !important; display: inline-block; box-sizing: border-box;">
                                     {movie_data['description']}
                                 </div>
                             </td>
@@ -93,15 +93,15 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                 <div class="movie-card">
                     <table width="100%" role="presentation" cellpadding="0" cellspacing="0" style="table-layout: fixed; width: 100%;">
                         <tr>
-                            <td class="movie-image" width="120" style="vertical-align: middle; padding: 10px; width: 120px;">
+                            <td class="movie-image" width="120" style="vertical-align: middle; padding: 10px; width: 120px; display: inline-block; max-width: 120px;">
                                 <img src="{serie_data['poster']}" alt="{serie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
                             </td>
-                            <td class="movie-content" style="vertical-align: top; padding: 10px 15px; word-wrap: break-word; width: 100%;">
-                                <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
-                                <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
+                            <td class="movie-content" style="vertical-align: top; padding: 10px 15px; display: inline-block; width: 100%; max-width: 100%; box-sizing: border-box; word-wrap: break-word; word-break: break-word;">
+                                <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important; word-break: break-word;">{serie_title} {seasons_str}</h3>
+                                <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important; word-break: break-word;">
                                     {translation[configuration.conf.email_template.language]['added_on']} {added_date}
                                 </div>
-                                <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important; word-wrap: break-word !important; overflow-wrap: anywhere !important; hyphens: auto !important; max-width: 100% !important;">
+                                <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important; word-wrap: break-word !important; word-break: break-word !important; overflow-wrap: break-word !important; hyphens: auto !important; max-width: 100% !important; display: inline-block; box-sizing: border-box;">
                                     {serie_data['description']}
                                 </div>
                             </td>
