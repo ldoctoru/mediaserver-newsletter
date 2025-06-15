@@ -35,7 +35,6 @@
             max-width: 600px;
             border-collapse: collapse;
             margin: 0 auto;
-            table-layout: fixed;
         }
         
         .content-cell {
@@ -91,6 +90,7 @@
         .movie-image {
             text-align: center;
             padding: 15px;
+            width: 120px;
         }
         
         .movie-image img {
@@ -120,7 +120,6 @@
             overflow-wrap: break-word !important;
             max-width: 100% !important;
             word-break: break-word !important;
-            hyphens: auto !important;
         }
         
         .section-title {
@@ -134,7 +133,6 @@
             border-collapse: collapse;
             margin: 20px 0;
             text-align: center;
-            table-layout: fixed;
         }
         
         .stats-cell {
@@ -182,59 +180,36 @@
         
         /* Media Queries */
         @media screen and (max-width: 600px) {
-            .movie-flex {
+            .movie-card-table {
                 display: block !important;
-            }
-            .movie-image, .movie-content {
                 width: 100% !important;
-                display: block;
+            }
+            .movie-image, .movie-content-cell {
+                display: block !important;
+                width: 100% !important;
+                text-align: center !important;
+                padding: 10px !important;
+                box-sizing: border-box;
             }
             .movie-image {
-                padding-bottom: 0;
+                padding-bottom: 0 !important;
             }
             .movie-image img {
-                max-width: 150px;
+                margin: 0 auto !important;
             }
-            .movie-content {
-                padding-left: 10px !important;
-                padding-right: 10px !important;
+            .movie-content-cell {
+                padding-top: 0 !important;
+                padding-left: 15px !important;
+                padding-right: 15px !important;
             }
             .movie-description {
                 font-size: 13px !important;
-                word-break: break-word !important;
-                overflow-wrap: break-word !important;
-                -webkit-hyphens: auto !important;
-                -ms-hyphens: auto !important;
-                hyphens: auto !important;
             }
             .main-table {
                 width: 100% !important;
             }
             .content-cell {
                 padding: 10px !important;
-            }
-            /* Gmail mobile-specific fix */
-            .movie-card table {
-                min-width: 100% !important;
-                width: 100% !important;
-            }
-            .movie-card td {
-                display: block !important;
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-            }
-            .movie-card .movie-image {
-                text-align: center !important;
-                padding-bottom: 0 !important;
-            }
-            .movie-card .movie-image img {
-                margin: 0 auto 10px !important;
-            }
-            .movie-card .movie-content {
-                padding-top: 0 !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
             }
         }
     </style>
