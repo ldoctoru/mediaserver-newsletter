@@ -9,7 +9,7 @@ translation = {
         "currently_available": "Currently available in Jellyfin :",
         "movies_label": "Movies",
         "episodes_label": "Episodes",
-        "footer_label":"You are recieving this email because you are using ${jellyfin_owner}'s Jellyfin server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
+        "footer_label":"You are recieving this email because you are using ${jellyfin_owner_name}'s Jellyfin server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
         "added_on": "Added on"
     },
     "fr":{
