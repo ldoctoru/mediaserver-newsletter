@@ -35,6 +35,7 @@
             max-width: 600px;
             border-collapse: collapse;
             margin: 0 auto;
+            table-layout: fixed;
         }
         
         .content-cell {
@@ -116,8 +117,9 @@
             line-height: 1.4 !important;
             color: #dddddd !important;
             word-wrap: break-word !important;
+            overflow-wrap: anywhere !important;
             max-width: 100% !important;
-            overflow-wrap: break-word !important;
+            hyphens: auto !important;
         }
         
         .section-title {
@@ -131,6 +133,7 @@
             border-collapse: collapse;
             margin: 20px 0;
             text-align: center;
+            table-layout: fixed;
         }
         
         .stats-cell {
@@ -197,6 +200,14 @@
             }
             .movie-description {
                 font-size: 13px !important;
+                word-break: break-word !important;
+                overflow-wrap: break-word !important;
+            }
+            .main-table {
+                width: 100% !important;
+            }
+            .content-cell {
+                padding: 10px !important;
             }
         }
     </style>
@@ -208,7 +219,7 @@
     </div>
     
     <center>
-        <table class="main-table" role="presentation" cellpadding="0" cellspacing="0">
+        <table class="main-table" role="presentation" cellpadding="0" cellspacing="0" width="100%">
             <tr>
                 <td class="content-cell" bgcolor="#000011">
                     <!-- Title Section -->
@@ -260,7 +271,7 @@
                         ${footer_label}<br><br>
                         <p>
                             <a href="https://github.com/SeaweedbrainCY/jellyfin-newsletter" class="footer-link">Jellyfin Newsletter</a> 
-                            is an open source project. Developed with ❤️ by 
+                            an open source project. Developed with ❤️ by 
                             <a href="https://github.com/SeaweedbrainCY/" class="footer-link">Seaweedbrain</a>
                         </p>
                     </footer>
