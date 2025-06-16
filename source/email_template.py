@@ -57,23 +57,25 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
             for movie_title, movie_data in movies.items():
                 added_date = movie_data["created_on"].split("T")[0]
                 movies_html += f"""
-                <div class="movie-card">
-                    <table class="movie-card-table" width="100%" role="presentation" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td class="movie-image" valign="top">
-                                <img src="{movie_data['poster']}" alt="{movie_title}" style="max-width: 100px; height: auto;">
-                            </td>
-                            <td class="movie-content-cell" valign="top" style="padding: 15px;">
-                                <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
-                                <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
-                                    {translation[configuration.conf.email_template.language]['added_on']} {added_date}
-                                </div>
-                                <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
-                                    {movie_data['description']}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="movie_container" style="margin-bottom: 15px;">
+                    <div class="movie_bg" style="background: url('{movie_data['poster']}') no-repeat center center; background-size: cover; border-radius: 10px;">
+                        <table class="movie" width="100%" role="presentation" cellpadding="0" cellspacing="0" style="background: rgba(0, 0, 0, 0.7); border-radius: 10px; width: 100%;">
+                            <tr>
+                                <td class="movie-image" valign="top" style="padding: 15px; text-align: center; width: 120px;">
+                                    <img src="{movie_data['poster']}" alt="{movie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
+                                </td>
+                                <td class="movie-content-cell" valign="top" style="padding: 15px;">
+                                    <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
+                                    <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
+                                        {translation[configuration.conf.email_template.language]['added_on']} {added_date}
+                                    </div>
+                                    <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
+                                        {movie_data['description']}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 """
                 
@@ -90,23 +92,25 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                 added_date = serie_data["created_on"].split("T")[0]
                 seasons_str = ", ".join(serie_data["seasons"])
                 series_html += f"""
-                <div class="movie-card">
-                    <table class="movie-card-table" width="100%" role="presentation" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td class="movie-image" valign="top">
-                                <img src="{serie_data['poster']}" alt="{serie_title}" style="max-width: 100px; height: auto;">
-                            </td>
-                            <td class="movie-content-cell" valign="top" style="padding: 15px;">
-                                <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
-                                <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
-                                    {translation[configuration.conf.email_template.language]['added_on']} {added_date}
-                                </div>
-                                <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
-                                    {serie_data['description']}
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
+                <div class="movie_container" style="margin-bottom: 15px;">
+                    <div class="movie_bg" style="background: url('{serie_data['poster']}') no-repeat center center; background-size: cover; border-radius: 10px;">
+                        <table class="movie" width="100%" role="presentation" cellpadding="0" cellspacing="0" style="background: rgba(0, 0, 0, 0.7); border-radius: 10px; width: 100%;">
+                            <tr>
+                                <td class="movie-image" valign="top" style="padding: 15px; text-align: center; width: 120px;">
+                                    <img src="{serie_data['poster']}" alt="{serie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
+                                </td>
+                                <td class="movie-content-cell" valign="top" style="padding: 15px;">
+                                    <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
+                                    <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
+                                        {translation[configuration.conf.email_template.language]['added_on']} {added_date}
+                                    </div>
+                                    <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
+                                        {serie_data['description']}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
                 """
                 
