@@ -64,13 +64,15 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                                 <td class="movie-image" valign="top" style="padding: 15px; text-align: center; width: 120px;">
                                     <img src="{movie_data['poster']}" alt="{movie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
                                 </td>
-                                <td class="movie-content-cell mobile-spacing" valign="top" style="padding: 15px;">
-                                    <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
-                                    <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
-                                        {translation[configuration.conf.email_template.language]['added_on']} {added_date}
-                                    </div>
-                                    <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
-                                        {movie_data['description']}
+                                <td class="movie-content-cell" valign="top" style="padding: 15px;">
+                                    <div class="mobile-text-container">
+                                        <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
+                                        <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
+                                            {translation[configuration.conf.email_template.language]['added_on']} {added_date}
+                                        </div>
+                                        <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
+                                            {movie_data['description']}
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -99,13 +101,15 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                                 <td class="movie-image" valign="top" style="padding: 15px; text-align: center; width: 120px;">
                                     <img src="{serie_data['poster']}" alt="{serie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
                                 </td>
-                                <td class="movie-content-cell mobile-spacing" valign="top" style="padding: 15px;">
-                                    <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
-                                    <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
-                                        {translation[configuration.conf.email_template.language]['added_on']} {added_date}
-                                    </div>
-                                    <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
-                                        {serie_data['description']}
+                                <td class="movie-content-cell" valign="top" style="padding: 15px;">
+                                    <div class="mobile-text-container">
+                                        <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
+                                        <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
+                                            {translation[configuration.conf.email_template.language]['added_on']} {added_date}
+                                        </div>
+                                        <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
+                                            {serie_data['description']}
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

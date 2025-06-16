@@ -193,10 +193,15 @@
             line-height: inherit !important;
         }
         
-        /* Mobile spacing */
+        /* Mobile spacing container */
+        .mobile-text-container {
+            /* No changes needed for desktop */
+        }
+
+        /* Mobile-specific spacing */
         @media screen and (max-width: 600px) {
-            .mobile-spacing {
-                padding-top: 25px !important;  /* Increased top padding */
+            .mobile-text-container {
+                margin-top: 20px; /* Increased space above text */
             }
             
             .movie-image {
@@ -204,7 +209,7 @@
             }
             
             .movie-content-cell {
-                padding-top: 15px !important;  /* Increased spacing */
+                padding-top: 5px !important; /* Reduced cell padding */
                 padding-left: 15px !important;
                 padding-right: 15px !important;
             }
