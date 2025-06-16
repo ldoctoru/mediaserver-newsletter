@@ -72,9 +72,24 @@
         }
         
         .movie-container {
-            padding: 10px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .movie_bg {
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
         }
         
+        .movie {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         .movie-card {
             background: rgba(0, 0, 0, 0.7);
             border: 1px solid #444;
@@ -178,6 +193,27 @@
             line-height: inherit !important;
         }
         
+        /* Mobile spacing container */
+        .mobile-text-container {
+            /* No changes needed for desktop */
+        }
+
+        /* Mobile-specific spacing */
+        @media screen and (max-width: 600px) {
+            .mobile-text-container {
+                margin-top: 20px; /* Increased space above text */
+            }
+            
+            .movie-image {
+                padding-bottom: 0 !important;
+            }
+            
+            .movie-content-cell {
+                padding-top: 5px !important; /* Reduced cell padding */
+                padding-left: 15px !important;
+                padding-right: 15px !important;
+            }
+        }
         /* Media Queries */
         @media screen and (max-width: 600px) {
             .movie-card-table {
@@ -204,6 +240,9 @@
             }
             .movie-description {
                 font-size: 13px !important;
+            }
+            .movie_container {
+                margin: 0 10px 15px;
             }
             .main-table {
                 width: 100% !important;
