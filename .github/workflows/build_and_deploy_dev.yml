@@ -22,7 +22,7 @@ jobs:
           working-directory: ./
           run: |
             current_version=${{ github.ref_name }}
-            docker build -t $DOCKER_IMAGE_NAME:dev -t $DOCKER_IMAGE_NAME:$current_version
+            docker build -t $DOCKER_IMAGE_NAME:dev -t $DOCKER_IMAGE_NAME:$current_version .
         - name: Login to GitHub Container Registry
           run: echo ${{ secrets.GHCR_TOKEN }} | docker login ghcr.io -u ${{ secrets.USERNAME }} --password-stdin
         - name: Push Docker image to GitHub Container Registry
