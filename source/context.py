@@ -1,0 +1,31 @@
+"""
+Add context management for placeholders. 
+Here are defined all placeholders the user can use in custom string to customize their email. 
+"""
+
+
+import datetime as dt 
+from source import configuration
+import locale
+
+# Set locale to the user's locale
+if configuration.conf.email_template.language == "fr":
+    locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
+else:
+    locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
+
+placeholders = {
+    "date": dt.datetime.now().strftime("%Y-%m-%d"),
+    "day_name": dt.datetime.now().strftime("%A"),
+    "day_number": dt.datetime.now().strftime("%d"),
+    "month_name": dt.datetime.now().strftime("%B"),
+    "month_number": dt.datetime.now().strftime("%m"),
+    "year": dt.datetime.now().strftime("%Y"),
+    "start_date": (dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days)).strftime("%Y-%m-%d"),
+    "start_day_name": (dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days)).strftime("%A"),
+    "start_day_number": (dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days)).strftime("%d"),
+    "start_month_name": (dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days)).strftime("%B"),
+    "start_month_number": (dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days)).strftime("%m"),
+    "start_year": (dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days)).strftime("%Y")
+
+}
