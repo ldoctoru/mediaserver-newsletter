@@ -1,4 +1,4 @@
-FROM python:3.12-alpine
+FROM python:3.12-slim
 
 RUN mkdir -p /app/config
 
@@ -10,15 +10,26 @@ COPY assets /app/assets
 
 WORKDIR /app
 
-RUN apk upgrade --no-cache
+RUN apt update 
 
-RUN apk add --no-cache --virtual build-deps  py3-pip build-base python3-dev libffi-dev openssl-dev gcc musl-dev
+RUN apt install -y --no-install-recommends locales python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools gcc
+
+RUN echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
+    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    locale-gen
+
+ENV LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8
+
 RUN pip install --no-cache --upgrade pip setuptools
-RUN apk add --no-cache mariadb-dev
 
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN apk del build-deps
+RUN apt remove -y python3-dev build-essential libssl-dev libffi-dev python3-setuptools gcc
+
+RUN apt autoremove -y
+
 
 USER 1001:1001
 CMD ["python", "main.py"]
