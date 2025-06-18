@@ -28,7 +28,7 @@ jobs:
         - name: Push Docker image to GitHub Container Registry
           run: |
             current_version=${{ github.ref_name }}
-            docker tag $DOCKER_IMAGE_NAME:latest ghcr.io/${{ secrets.USERNAME }}/$DOCKER_IMAGE_NAME:dev
+            docker tag $DOCKER_IMAGE_NAME:dev ghcr.io/${{ secrets.USERNAME }}/$DOCKER_IMAGE_NAME:dev
             docker tag $DOCKER_IMAGE_NAME:$current_version ghcr.io/${{ secrets.USERNAME }}/$DOCKER_IMAGE_NAME:$current_version
             docker push ghcr.io/${{ secrets.USERNAME }}/$DOCKER_IMAGE_NAME:dev
             docker push ghcr.io/${{ secrets.USERNAME }}/$DOCKER_IMAGE_NAME:$current_version
