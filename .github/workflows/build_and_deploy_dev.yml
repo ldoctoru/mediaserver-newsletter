@@ -12,7 +12,7 @@ jobs:
         uses: ./.github/workflows/security_test.yml 
     build_and_publish :
       needs: [security_test]
-      name: Build and publish image
+      name: Build and publish dev image
       runs-on: ubuntu-latest
       env:
         DOCKER_IMAGE_NAME: "jellyfin-newsletter"
