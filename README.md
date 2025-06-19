@@ -14,6 +14,17 @@ A simple newsletter python script for Jellyfin to notify your users of your last
 
 It is fully customizable and can be run on a schedule using a cron job or a task scheduler.
 
+## Table of Contents
+1. [What it looks like ?](#what-it-looks-like-)
+2. [Features](#features)
+3. [Installation (docker) (recommended ⭐)](#installation-docker-recommended-)
+4. [Current limitations](#current-limitations)
+5. [License](#license)
+6. [Contribution](#contribution)
+7. [How to](#how-to)
+   - [How to generate a Jellyfin API key](#how-to-generate-a-jellyfin-api-key)
+   - [How to generate a TMDB API key](#how-to-generate-a-tmdb-api-key)
+
 ## What it looks like ? 
 <p align="center">
 <img src="https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/assets/new_media_notification_preview.png" width=500>
@@ -122,104 +133,8 @@ crontab -e
 ```
 *Note : It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/pkgs/container/jellyfin-newsletter)*
 
-## Installation (manual)
-### Requirements
-- Python 3.9+ 
-- Jellyfin API key - [How to generate an API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-jellyfin-api-key)
-- A TMDB API key (free) - [How to generate a TMDB API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-tmdb-api-key)
-- A SMTP server 
-
-### Installation and setup
-1. Clone the repository on your machine
-```bash
-git clone https://github.com/SeaweedbrainCY/jellyfin-newsletter
-```
-2. Install the required packages 
-```bash
-# Unix : 
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Windows :
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-```
-3.  Copy the `config/config-example.yml` to `config/config.yml` ([direct download](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml)) and fill in the required fields. **All fields are required**.
-```yaml
-jellyfin:
-    # URL of your jellyfin server
-    url: "" 
-
-    # API token of your jellyfin server. See requirements for more info
-    api_token: ""
-
-    # List of folders to watch for new movies. 
-    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
-    watched_film_folders:
-        - ""
-        # example for /movies folder add "movies"
 
 
-    # List of folders to watch for new movies. 
-    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
-    watched_tv_folders:
-        - ""
-        # example for /movies folder add "movies"
-  
-  # Number of days to look back for new items
-  observed_period_days: 30
-
-tmdb:
-    # TMDB API key. See requirements for more info.
-    api_key: ""
-
-# Email template to use for the newsletter
-email_template:
-    # Language of the email. Supported languages are "en" and "fr".
-    language: "en"
-    # Subject of the email
-    subject: ""
-    # Title of the email
-    title: ""
-    # Subtitle of the email
-    subtitle: ""
-    # Will be used to redirect the user to your Jellyfin instance
-    jellyfin_url: ""
-    # Used in the footer. This is a legal notice.
-    unsubscribe_email: ""
-    # Used in the footer
-    jellyfin_owner_name: ""
-
-
-email:
-    # SMTP server configuration. TLS is required for now.
-    smtp_server: ""
-    smtp_port: 
-    smtp_username: ""
-    smtp_password: ""
-    smtp_sender_email: ""
-
-
-# List of users to send the newsletter to.
-recipients:
-  - ""
-  # Example : "fname@email.com" or "fname <fname@email.com">
-```
-
-4. Run the script
-```bash
-python main.py
-```
-
-5. (Optional) Schedule the script to run on a regular basis. 
-```bash
-# Unix :
-crontab -e
-# Add the following line to run the script every 1st of the month at 8am
-0 8 1 * * root /path/to/project/venv/bin/python /path/to/main.py
-```
 
 ## Current limitations
 - Only supports English and French languages for the email template
@@ -232,6 +147,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contribution
 Feel free to contribute to this project by opening an issue or a pull request.
+
+A contribution guide is available in the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 If you like this project, consider giving it a ⭐️.
 
