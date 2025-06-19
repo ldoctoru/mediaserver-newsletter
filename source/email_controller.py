@@ -1,4 +1,5 @@
 from source import configuration
+from source import context
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -17,7 +18,7 @@ def send_email(html_content):
     
     for recipient in configuration.conf.recipients:
         msg = MIMEMultipart('alternative')
-        msg['Subject'] = configuration.conf.email_template.subject
+        msg['Subject'] = configuration.conf.email_template.subject.format_map(context.placeholders)
         msg['From'] = configuration.conf.email.smtp_sender_email
         part = MIMEText(html_content, 'html')
     

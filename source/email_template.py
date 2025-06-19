@@ -1,5 +1,6 @@
 from source import configuration
 import re
+from source import context
 
 translation = {
     "en":{
@@ -39,11 +40,11 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
             raise Exception(f"[FATAL] Language {configuration.conf.email_template.language} not supported. Supported languages are fr and en")
 
         custom_keys = [
-            {"key": "title", "value": configuration.conf.email_template.title}, 
-            {"key": "subtitle", "value": configuration.conf.email_template.subtitle},
+            {"key": "title", "value": configuration.conf.email_template.title.format_map(context.placeholders)}, 
+            {"key": "subtitle", "value": configuration.conf.email_template.subtitle.format_map(context.placeholders)},
             {"key": "jellyfin_url", "value": configuration.conf.email_template.jellyfin_url},
-            {"key": "jellyfin_owner_name", "value": configuration.conf.email_template.jellyfin_owner_name},
-            {"key": "unsubscribe_email", "value": configuration.conf.email_template.unsubscribe_email}
+            {"key": "jellyfin_owner_name", "value": configuration.conf.email_template.jellyfin_owner_name.format_map(context.placeholders)},
+            {"key": "unsubscribe_email", "value": configuration.conf.email_template.unsubscribe_email.format_map(context.placeholders)}
         ]
         
         for key in custom_keys:
