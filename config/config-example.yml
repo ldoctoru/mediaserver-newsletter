@@ -47,12 +47,16 @@ email_template:
     # Used in the footer
     jellyfin_owner_name: ""
 
-
+# SMTP server configuration, TLS is required for now
+# Check your email provider for more information
 email:
-    # SMTP server configuration, TLS is required for now
+    # Example: GMail: smtp.gmail.com
     smtp_server: ""
+    # Usually 587
     smtp_port: 
+    # The username of your SMTP account
     smtp_username: ""
+    # The password of your SMTP account
     smtp_password: ""
     # Example: "jellyfin@example.com" or to set display username "Jellyfin <jellyfin@example.com">
     smtp_sender_email: ""
