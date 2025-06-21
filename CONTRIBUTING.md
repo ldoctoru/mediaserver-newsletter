@@ -107,14 +107,14 @@ email:
     smtp_username: ""
     # The password of your SMTP account
     smtp_password: ""
-    # Example: "jellyfin@example.com" or to set display username "Jellyfin <jellyfin@example.com">
+    # Example: "jellyfin@example.com" or to set display username "Jellyfin <jellyfin@example.com>"
     smtp_sender_email: ""
 
 
 # List of users to send the newsletter to
 recipients:
   - ""
-  # Example: "name@example.com" or to set username "Name <name@example.com">
+  # Example: "name@example.com" or to set username "Name <name@example.com>"
 ```
 
 3. Make sure to support the following locales:
