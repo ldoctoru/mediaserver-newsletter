@@ -1,4 +1,4 @@
-# Jellyfin Newsletter - Your recent additions in your users' inbox
+# Jellyfin Newsletter - keep your users updated
 
 <p align="center">
 <img src="https://github.com/SeaweedbrainCY/jellyfin-newsletter/actions/workflows/build_and_deploy.yml/badge.svg?branch="/>
@@ -10,7 +10,7 @@
 <img src="https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/assets/jellyfin_newsletter.png" width=100>
 </p>
 
-A newsletter for Jellyfin to notify your users of your latest additions. Using the Jellyfin API it will retrieve the last added items and send them to your users. 
+A newsletter for Jellyfin to notify your users of your latest additions. Jellyfin Newsletter connects to the Jellyfin API to retrieve recently added items and send them to your users. 
 
 It is fully customizable and can be run on a schedule using a cron job or a task scheduler.
 
@@ -101,12 +101,16 @@ email_template:
     # Used in the footer
     jellyfin_owner_name: ""
 
-
+# SMTP server configuration, TLS is required for now
+# Check your email provider for more information
 email:
-    # SMTP server configuration. TLS is required for now.
+    # Example: GMail: smtp.gmail.com
     smtp_server: ""
+    # Usually 587
     smtp_port: 
+    # The username of your SMTP account
     smtp_username: ""
+    # The password of your SMTP account
     smtp_password: ""
     # Example: "jellyfin@example.com" or to set display username "Jellyfin <jellyfin@example.com">
     smtp_sender_email: ""
