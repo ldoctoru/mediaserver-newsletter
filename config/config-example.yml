@@ -22,8 +22,8 @@ jellyfin:
         - ""
         # example for /tv folder add "tv"
   
-  # Number of days to look back for new items
-  observed_period_days: 30
+    # Number of days to look back for new items
+    observed_period_days: 30
 
 tmdb:
     # TMDB API key, see requirements for more info
