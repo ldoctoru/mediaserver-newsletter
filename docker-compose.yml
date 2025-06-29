@@ -1,0 +1,18 @@
+services:
+  jellyfin-newsletter:
+    container_name: jellyfin-newsletter
+    image: 'ghcr.io/seaweedbraincy/jellyfin-newsletter:latest'
+    environment:
+      USER_UID: 1000
+      USER_GID: 1000
+      TZ: 'America/Toronto'
+      
+
+    volumes:
+      - './config.yml:/app/config/config.yml'
+    
+
+
+
+
+
