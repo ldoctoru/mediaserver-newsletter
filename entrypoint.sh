@@ -20,7 +20,7 @@ if [ "$USER_GID" = "" ]; then
 fi
 
 # Check if config file exists
-if [ ! -f /app/config/config.yml && ! -f /app/config/config.yaml  ]; then
+if  [ ! -f /app/config/config.yml ] && [ ! -f /app/config/config.yaml ]; then
     echo "Config file not found. Generating default config."
     cp /app/default/config-example.yml /app/config/config.yml 
     cp /app/default/config-example.yml /app/config/config-example.yaml

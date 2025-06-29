@@ -36,4 +36,4 @@ RUN apt remove -y python3-dev build-essential libssl-dev libffi-dev python3-setu
 RUN apt autoremove -y
 
 
-CMD ["/app/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
