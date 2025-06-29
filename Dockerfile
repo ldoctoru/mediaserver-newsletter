@@ -7,7 +7,8 @@ COPY requirements.txt /app
 COPY main.py /app
 COPY template /app/template
 COPY assets /app/assets
-
+COPY entrypoint.sh /app/entrypoint.sh
+COPY config/config-example.yml /app/default/config-example.yml
 WORKDIR /app
 
 RUN apt update 
@@ -31,5 +32,4 @@ RUN apt remove -y python3-dev build-essential libssl-dev libffi-dev python3-setu
 RUN apt autoremove -y
 
 
-USER 1001:1001
-CMD ["python", "main.py"]
+CMD ["entrypoint.sh"]
