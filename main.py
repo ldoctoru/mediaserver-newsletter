@@ -2,6 +2,7 @@ import sys
 from source import configuration, JellyfinAPI, TmdbAPI, email_template, email_controller
 import datetime as dt
 from source.configuration import logging
+from source.configuration_checker import check_configuration
 
 
 
@@ -66,6 +67,13 @@ Jellyfin Newsletter is starting ....
 
 
 """)
+    logging.info("Checking configuration ...")
+    try:
+        check_configuration()
+    except Exception as e:
+        logging.error(f"[FATAL] Configuration check failed: {e}")
+        sys.exit(1)
+    logging.info("Configuration check passed.")
 
     folders = JellyfinAPI.get_root_items()
     watched_film_folders_id = []
