@@ -9,7 +9,11 @@ COPY template /app/template
 COPY assets /app/assets
 COPY entrypoint.sh /app/entrypoint.sh
 COPY config/config-example.yml /app/default/config-example.yml
+
+
 WORKDIR /app
+
+RUN chmod +x /app/entrypoint.sh
 
 RUN apt update 
 
