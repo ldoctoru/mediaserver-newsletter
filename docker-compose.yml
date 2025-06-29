@@ -9,7 +9,7 @@ services:
       
 
     volumes:
-      - './config.yml:/app/config/config.yml'
+      - './config:/app/config'
     
 
 
