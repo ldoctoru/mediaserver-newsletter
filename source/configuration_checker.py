@@ -78,6 +78,11 @@ def check_recipients_configuration():
     assert isinstance(conf.recipients, list), "[FATAL] Invalid recipients configuration. The recipients must be a list. Please check the configuration."
     
 
+def check_scheduler_configuration():
+    if conf.scheduler.enabled:
+        assert isinstance(conf.scheduler.cron, str), "[FATAL] Invalid scheduler cron expression. The cron expression must be a string. Please check the configuration."
+
+
 def check_configuration():
     """
     Check if the configuration is valid.

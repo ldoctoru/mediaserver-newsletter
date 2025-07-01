@@ -7,6 +7,16 @@ logging.basicConfig(
 )
 
 
+class Scheduler:
+    def __init__(self, data):
+        if "cron" not in data:
+            logging.info("No cron expression given. The newsletter will run once at startup and then stop.")
+            self.enabled = False
+        else:
+            self.enabled = True
+            self.cron = data["cron"]
+            
+
 class Jellyfin:
     required_keys = ["url", "api_token",  "watched_film_folders", "watched_tv_folders", "observed_period_days"]
     def __init__(self, data):
@@ -71,6 +81,7 @@ class Config:
         self.email_template = EmailTemplate(data["email_template"])
         self.email = Email(data["email"])
         self.recipients = data["recipients"]
+        self.scheduler = Scheduler(data["scheduler"]) if "scheduler" in data else Scheduler([])
     
     
 
