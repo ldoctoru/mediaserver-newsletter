@@ -253,7 +253,7 @@ docker run --rm \
 # Unix :
 crontab -e
 # Add the following line to run the script every 1st of the month at 8am
-0 8 1 * * root docker run --rm -v $(pwd)/config.yml:/app/config/config.yml -e USER_UID=1001 -e USER_GID=1001  ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.6.0
+0 8 1 * * root docker run --rm -v PATH_TO_CONFIG_FOLDER/config:/app/config/ ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.6.0
 ```
 
 
