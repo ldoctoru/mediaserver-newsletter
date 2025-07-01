@@ -49,13 +49,34 @@ It is fully customizable and can be run on a schedule using a cron job or a task
 - A TMDB API key (free) - [How to generate a TMDB API key](https://github.com/SeaweedbrainCY/jellyfin-newsletter?tab=readme-ov-file#how-to-generate-a-tmdb-api-key)
 - A SMTP server 
 
-### Configuration
-1. Download the [config file](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml):
+### Configuration with built-in cron job
+This is the default and recommended way to run the newsletter. The Docker container will run on a schedule using a built-in cron job. It will run on the schedule defined in the `config/config.yml` file.
+
+1. Download the [docker-compose.yml](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/docker-compose.yml) file:
+```bash 
+curl -o docker-compose.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/docker-compose.yml
 ```
-curl -o config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml
+
+2. (optional) Edit the `docker-compose.yml` file to change the default user or timezone.
+
+3. Create a `config` folder in the same directory as the `docker-compose.yml` file:
+```bash
+mkdir config
 ```
-2. Edit the `config.yml` file and fill in the required fields. **All fields are required.**
+
+4. Download the [config file](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml) in the `config` folder:
+```
+curl -o config/config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml
+```
+5. Edit the `config/config.yml` file and fill in the required fields. **All fields are required.**
 ```yaml
+scheduler:
+    # Crontab expression to send the newsletter. 
+    # Comment the scheduler section to disable the automatic sending of the newsletter. WARNING: IF COMMENTED, THE NEWSLETTER WILL BE RAN ONCE AT THE START OF THE CONTAINER.
+    # Test your crontab expression here: https://crontab.guru/
+    # This example will send the newsletter on the first day of every month at 8:00 AM
+    cron: "0 8 1 * *"
+
 jellyfin:
     # URL of your jellyfin server
     url: "" 
@@ -122,24 +143,119 @@ recipients:
   # Example: "name@example.com" or to set username "Name <name@example.com>"
 ```
 
-3. Run the docker container 
+6. Run the docker container with docker compose 
+```bash
+docker compose up -d
+```
+
+> [!note]
+> Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/releases)
+
+
+### Configuration with external cron job
+Use this method if you want to run the script on a schedule using an external cron job or task scheduler, instead of the built-in cron job. Docker will run once, and exit after sending the newsletter.
+
+1. Create a `config` folder.
+```bash
+mkdir config
+```
+
+2. Download the [config file](https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml) in the `config` folder:
+```
+curl -o config/config.yml https://raw.githubusercontent.com/SeaweedbrainCY/jellyfin-newsletter/refs/heads/main/config/config-example.yml
+```
+2. Edit the `config/config.yml` file and fill in the required fields. **All fields are required.**
+```yaml
+#scheduler:
+    # Crontab expression to send the newsletter. 
+    # Comment the scheduler section to disable the automatic sending of the newsletter. WARNING: IF COMMENTED, THE NEWSLETTER WILL BE RAN ONCE AT THE START OF THE CONTAINER.
+    # Test your crontab expression here: https://crontab.guru/
+    # This example will send the newsletter on the first day of every month at 8:00 AM
+    #cron: "0 8 1 * *"
+
+jellyfin:
+    # URL of your jellyfin server
+    url: "" 
+
+    # API token of your jellyfin server, see requirements for more info
+    api_token: ""
+
+    # List of folders to watch for new movies 
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    watched_film_folders:
+        - ""
+        # example for /movies folder add "movies"
+
+
+    # List of folders to watch for new shows
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    watched_tv_folders:
+        - ""
+        # example for /tv folder add "tv"
+  
+  # Number of days to look back for new items
+  observed_period_days: 30
+
+tmdb:
+    # TMDB API key, see requirements for more info
+    api_key: ""
+
+# Email template to use for the newsletter
+# You can use placeholders to dynamically insert values. See available placeholders here : https://github.com/SeaweedbrainCY/jellyfin-newsletter/wiki/How-to-use-placeholder
+email_template:
+    # Language of the email, supported languages are "en" and "fr"
+    language: "en"
+    # Subject of the email
+    subject: ""
+    # Title of the email
+    title: ""
+    # Subtitle of the email
+    subtitle: ""
+    # Will be used to redirect the user to your Jellyfin instance
+    jellyfin_url: ""
+    # For the legal notice in the footer
+    unsubscribe_email: ""
+    # Used in the footer
+    jellyfin_owner_name: ""
+
+# SMTP server configuration, TLS is required for now
+# Check your email provider for more information
+email:
+    # Example: GMail: smtp.gmail.com
+    smtp_server: ""
+    # Usually 587
+    smtp_port: 
+    # The username of your SMTP account
+    smtp_username: ""
+    # The password of your SMTP account
+    smtp_password: ""
+    # Example: "jellyfin@example.com" or to set display username "Jellyfin <jellyfin@example.com>"
+    smtp_sender_email: ""
+
+
+# List of users to send the newsletter to
+recipients:
+  - ""
+  # Example: "name@example.com" or to set username "Name <name@example.com>"
+```
+
+3. Run the docker container to send the newsletter
 ```bash
 docker run --rm \
-    -v ./config.yml:/app/config/config.yml \
-    -e USER_UID='1001' \
-    -e USER_GID='1001' \
-    ghcr.io/seaweedbraincy/jellyfin-newsletter:latest
+    -v ./config:/app/config \
+    ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.6.0
 ```
-*Note: It is recommended to use a static version instead of  `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/pkgs/container/jellyfin-newsletter)*
+> [!note]
+> Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/releases)
 
-4. (Optional) Schedule the script to run on a regular basis. 
+4. Schedule the script to run on a regular basis. 
 ```bash
 # Unix :
 crontab -e
 # Add the following line to run the script every 1st of the month at 8am
-0 8 1 * * root docker run --rm -v $(pwd)/config.yml:/app/config/config.yml -e USER_UID=1001 -e USER_GID=1001  ghcr.io/seaweedbraincy/jellyfin-newsletter:latest
+0 8 1 * * root docker run --rm -v $(pwd)/config.yml:/app/config/config.yml -e USER_UID=1001 -e USER_GID=1001  ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.6.0
 ```
-*Note: It is recommended to use a static version instead of `latest`, and manually upgrade. [Last version](https://github.com/SeaweedbrainCY/jellyfin-newsletter/pkgs/container/jellyfin-newsletter)*
+
 
 
 
