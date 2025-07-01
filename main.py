@@ -3,6 +3,8 @@ from source import configuration, JellyfinAPI, TmdbAPI, email_template, email_co
 import datetime as dt
 from source.configuration import logging
 from source.configuration_checker import check_configuration
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 
 
@@ -57,24 +59,8 @@ def catch_undefined_series(series_items, watched_tv_folders_id):
                     
 
 
-
-
-if __name__ == "__main__":
-    logging.info("""
-
-Jellyfin Newsletter is starting ....
-##############################################
-
-
-""")
-    logging.info("Checking configuration ...")
-    try:
-        check_configuration()
-    except Exception as e:
-        logging.error(f"[FATAL] Configuration check failed: {e}")
-        sys.exit(1)
-    logging.info("Configuration check passed.")
-
+def send_newsletter():
+    logging.info("Sending newsletter ...")
     folders = JellyfinAPI.get_root_items()
     watched_film_folders_id = []
     watched_tv_folders_id = []
@@ -159,8 +145,65 @@ Jellyfin Newsletter is starting ....
     
     
 ##############################################
+Newsletter sent. 
 Thanks for using Jellyfin Newsletter!
 Developed by Seaweedbrain, under MIT License.""")
+
+
+
+def newsletter_job():
+    """
+    Used to run the newsletter, called by scheduler. 
+    Used to handle exceptions and logging.
+    """
+    try:
+        send_newsletter()
+    except Exception as e:
+        logging.error(f"[FATAL] An error occurred while sending the newsletter: {e}")
+        logging.error("Sending newsletter failed. Program will continue to run and retry at the next scheduled time.")
+
+
+
+if __name__ == "__main__":
+    logging.info("""
+
+Jellyfin Newsletter is starting ....
+##############################################
+
+
+""")
+    logging.info("Checking configuration ...")
+    try:
+        check_configuration()
+    except Exception as e:
+        logging.error(f"[FATAL] Configuration check failed: {e}")
+        sys.exit(1)
+    logging.info("Configuration check passed.")
+
+    if configuration.conf.scheduler.enabled:
+        try:
+            scheduler = BlockingScheduler()
+            trigger = CronTrigger().from_crontab(configuration.conf.scheduler.cron)
+        except Exception as e:
+            logging.error(f"[FATAL] Failed to initialize scheduler: {e}")
+            sys.exit(1)
+
+        scheduler.add_job(newsletter_job, trigger)
+        scheduler.start()
+        logging.info(f"Newsletter will run according to the cron expression: {configuration.conf.scheduler.cron}")
+    else:
+        logging.info("Scheduler is disabled. Newsletter will run once, now.")
+        send_newsletter()
+
+        
+
+
+
+
+
+
+
+    
 
     
 
