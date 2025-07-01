@@ -1,13 +1,14 @@
 services:
   jellyfin-newsletter:
     container_name: jellyfin-newsletter
-    image: 'ghcr.io/seaweedbraincy/jellyfin-newsletter:latest'
+    image: 'ghcr.io/seaweedbraincy/jellyfin-newsletter:dev'
     environment:
       USER_UID: 1000
       USER_GID: 1000
       TZ: 'America/Toronto'
+      CRON : 0 8 1 * *  # Run the newsletter on the first day of each month at 8:00 AM
       
-
+    restart: unless-stopped
     volumes:
       - './config:/app/config'
     
