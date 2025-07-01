@@ -1,6 +1,13 @@
 ### Example configuration file.
 ## All values are mandatory, except for the ones that are commented out.
 
+scheduler:
+    # Crontab expression to send the newsletter. 
+    # Comment the scheduler section to disable the automatic sending of the newsletter. WARNING: IF COMMENTED, THE NEWSLETTER WILL BE RAN ONCE AT THE START OF THE CONTAINER.
+    # Test your crontab expression here: https://crontab.guru/
+    # This example will send the newsletter on the first day of every month at 8:00 AM
+    cron: "0 8 1 * *"
+    
 
 jellyfin:
     # URL of your jellyfin server
@@ -22,8 +29,8 @@ jellyfin:
         - ""
         # example for /tv folder add "tv"
   
-  # Number of days to look back for new items
-  observed_period_days: 30
+    # Number of days to look back for new items
+    observed_period_days: 30
 
 tmdb:
     # TMDB API key, see requirements for more info
