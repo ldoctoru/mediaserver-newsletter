@@ -1,3 +1,5 @@
+name: Code Security Scan
+
 on: 
   workflow_call:
   push:
