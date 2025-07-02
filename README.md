@@ -85,17 +85,17 @@ jellyfin:
     api_token: ""
 
     # List of folders to watch for new movies 
-    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **ONLY ADD THE LAST FOLDER NAME, WITHOUT ANY '/'**
     watched_film_folders:
         - ""
-        # example for /movies folder add "movies"
+        # example for /media/movies folder add "movies"
 
 
     # List of folders to watch for new shows
-    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **ONLY ADD THE LAST FOLDER NAME, WITHOUT ANY '/'**
     watched_tv_folders:
         - ""
-        # example for /tv folder add "tv"
+        # example for /media/tv folder add "tv"
   
   # Number of days to look back for new items
   observed_period_days: 30
@@ -181,17 +181,17 @@ jellyfin:
     api_token: ""
 
     # List of folders to watch for new movies 
-    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **ONLY ADD THE LAST FOLDER NAME, WITHOUT ANY '/'**
     watched_film_folders:
         - ""
-        # example for /movies folder add "movies"
+        # example for /media/movies folder add "movies"
 
 
     # List of folders to watch for new shows
-    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **WITHOUT THE TRAILING /**
+    # You can find them in your Jellyfin Dashboard -> Libraries -> Select a library -> Folder **ONLY ADD THE LAST FOLDER NAME, WITHOUT ANY '/'**
     watched_tv_folders:
         - ""
-        # example for /tv folder add "tv"
+        # example for /media/tv folder add "tv"
   
   # Number of days to look back for new items
   observed_period_days: 30
