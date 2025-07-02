@@ -24,7 +24,8 @@ def get_media_detail_from_title(title, type, year=None):
 
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
-        raise Exception(f"Error while getting the token, status code: {response.status_code}. Answer: {response.json()}.")
+        logging.error(f"Error while getting media detail from title, status code: {response.status_code}.")
+        raise Exception(f"Error while getting the token, status code: {response.status_code}. Answer: {response.text}.")
     if response.json()["total_results"] == 1:
         return response.json()["results"][0]
     elif response.json()["total_results"] > 1:
@@ -59,5 +60,6 @@ def get_media_detail_from_id(id, type):
 
     response = requests.get(url, headers=headers)
     if response.status_code != 200:
-        raise Exception(f"Error while getting the token, status code: {response.status_code}. Answer: {response.json()}.")
+        logging.error(f"Error while getting media detail from id, status code: {response.status_code}.")
+        raise Exception(f"Error while getting media detail from id, status code: {response.status_code}. Answer: {response.text}.")
     return response.json()

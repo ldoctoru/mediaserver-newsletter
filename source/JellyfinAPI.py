@@ -9,7 +9,8 @@ def get_root_items():
 
     response = requests.get(f'{configuration.conf.jellyfin.url}/Items', headers=headers)
     if response.status_code != 200:
-        raise Exception(f"Error while getting the root items, status code: {response.status_code}. Answer: {response.json()}.")
+        logging.error(f"Error while getting the root items, status code: {response.status_code}.")
+        raise Exception(f"Error while getting the root items, status code: {response.status_code}. Answer: {response.text}.")
     return response.json()["Items"]
 
 
@@ -24,7 +25,8 @@ def get_item_from_parent(parent_id, type, minimum_creation_date=None):
 
     response = requests.get(f'{configuration.conf.jellyfin.url}/Items?ParentId={parent_id}&fields=DateCreated,ProviderIds&Recursive=true', headers=headers)
     if response.status_code != 200:
-        raise Exception(f"Error while getting the items from parent, status code: {response.status_code}. Answer: {response.json()}.")
+        logging.error(f"Error while getting the items from parent, status code: {response.status_code}.")
+        raise Exception(f"Error while getting the items from parent, status code: {response.status_code}. Answer: {response.text}.")
     if not minimum_creation_date:
         return response.json()["Items"], response.json()["TotalRecordCount"]
     else:
@@ -42,7 +44,8 @@ def get_item_from_parent_by_name(parent_id, name):
     }
     response = requests.get(f'{configuration.conf.jellyfin.url}/Items?ParentId={parent_id}&fields=DateCreated,ProviderIds&Recursive=true', headers=headers)
     if response.status_code != 200:
-        raise Exception(f"Error while getting the items from parent, status code: {response.status_code}. Answer: {response.json()}.")
+        logging.error(f"Error while getting the items from parent, status code: {response.status_code}.")
+        raise Exception(f"Error while getting the items from parent, status code: {response.status_code}. Answer: {response.text}.")
     for item in response.json()["Items"]:
         if "Name" in item.keys():
             if item["Name"] == name:
