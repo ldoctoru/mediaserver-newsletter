@@ -67,10 +67,12 @@ def send_newsletter():
     for item in folders:
         if item["Name"] in configuration.conf.jellyfin.watched_film_folders :
            watched_film_folders_id.append(item["Id"])
+           logging.info(f"Folder {item['Name']} is watched for films.")
         elif item["Name"] in configuration.conf.jellyfin.watched_tv_folders :
             watched_tv_folders_id.append(item["Id"])
+            logging.info(f"Folder {item['Name']} is watched for TV series.")
         else:
-            logging.warning(f"Folder {item['Name']} is not watched. Skipping.")
+            logging.warning(f"Folder {item['Name']} is not watched. Skipping. Add \"{item['Name']}\" in your watched folder to include it.")
 
     total_movie = 0
     total_tv = 0
