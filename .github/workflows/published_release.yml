@@ -26,4 +26,4 @@ jobs:
           
           git add README.md docker-compose.yml
           git commit -m "chore: bump image version to ${{ github.event.release.tag_name }}"
-          git push
+          git push origin HEAD:main
