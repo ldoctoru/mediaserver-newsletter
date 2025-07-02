@@ -9,7 +9,7 @@ logging.basicConfig(
 
 class Scheduler:
     def __init__(self, data):
-        if "cron" not in data:
+        if data is None or "cron" not in data:
             logging.info("No cron expression given. The newsletter will run once at startup and then stop.")
             self.enabled = False
         else:
