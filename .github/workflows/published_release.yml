@@ -3,6 +3,7 @@ name: New release published
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 jobs:
   update-version:
