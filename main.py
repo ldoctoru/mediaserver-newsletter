@@ -193,8 +193,9 @@ Make sure to review breaking changes in https://github.com/SeaweedbrainCY/jellyf
             sys.exit(1)
 
         scheduler.add_job(newsletter_job, trigger)
+        logging.info(f"Newsletter scheduler started. Next run at {trigger.get_next_fire_time(None, dt.datetime.now()).isoformat()}")
         scheduler.start()
-        logging.info(f"Newsletter will run according to the cron expression: {configuration.conf.scheduler.cron}")
+        
     else:
         logging.info("Scheduler is disabled. Newsletter will run once, now.")
         send_newsletter()
