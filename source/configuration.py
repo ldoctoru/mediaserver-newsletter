@@ -15,6 +15,18 @@ class Scheduler:
         else:
             self.enabled = True
             self.cron = data["cron"]
+            parsed_cron = self.cron.strip().split(" ")
+            if len(parsed_cron) != 5:
+                raise Exception(f"[FATAL] Load config fail. Was expecting a valid cron expression in scheduler.cron, got {self.cron}")
+            try:
+                # The week of day, if an int, is 0-6, where 0 is Sunday, according to official/usual crontab expression
+                # However, APScheduler, always starts week on Monday, so there is a shift of 1 
+                # We are fixing this, by modifying the cron expression, so 0-6 shift from mon-sun to sun-sat
+                self.week_of_day = int(parsed_cron[4])
+                self.week_of_day = (self.week_of_day - 1) % 7
+                self.cron = " ".join(parsed_cron[:4]) + f" {self.week_of_day}"
+            except:
+                pass
             
 
 class Jellyfin:
