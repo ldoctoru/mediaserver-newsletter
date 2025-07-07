@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed to ensure all refs are present for branch checkout
+          fetch-depth: 0  # Ensures all branches and tags are fetched
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
