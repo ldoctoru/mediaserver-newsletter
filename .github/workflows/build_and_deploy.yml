@@ -19,11 +19,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Set up Docker Buildx for multi-arch and caching
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      # Login to GitHub Container Registry
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -31,7 +29,6 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
 
-      # Cache Docker layers
       - name: Set up Docker cache
         uses: actions/cache@v4
         with:
@@ -55,11 +52,9 @@ jobs:
             --cache-from type=local,src=/tmp/.buildx-cache \
             --cache-to type=local,dest=/tmp/.buildx-cache-new,mode=max \
             --push .
-          # Move cache for next build
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      # Update README.md with new tag and push to main
       - name: Update image version in README.md
         run: |
           current_version=$(echo ${{ github.ref_name }} | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/')
