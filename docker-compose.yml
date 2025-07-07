@@ -1,16 +1,10 @@
 services:
-  jellyfin-newsletter:
-    container_name: jellyfin-newsletter
-    image: 'ghcr.io/seaweedbraincy/jellyfin-newsletter:v0.6.2'
+  mediaserver-newsletter:
+    container_name: mediaserver-newsletter
+    image: 'ghcr.io/ldoctoru/mediaserver-newsletter:latest'
     environment:
       USER_UID: 1000
       USER_GID: 1000
-      TZ: 'America/Toronto'
+      TZ: 'Europe/Bucharest'
     volumes:
       - './config:/app/config'
-    
-
-
-
-
-

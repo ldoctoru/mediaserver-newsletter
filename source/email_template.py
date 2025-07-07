@@ -1,49 +1,89 @@
 from source import configuration
 import re
 from source import context
+import os
 
+# Define two translation blocks, one for each server type if you want!
 translation = {
-    "en":{
-        "discover_now": "Discover now",
-        "new_film": "New movies:",
-        "new_tvs": "New shows:",
-        "currently_available": "Currently available in Jellyfin:",
-        "movies_label": "Movies",
-        "episodes_label": "Episodes",
-        "footer_label":"You are recieving this email because you are using ${jellyfin_owner_name}'s Jellyfin server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
-        "added_on": "Added on"
+    "jellyfin": {
+        "en": {
+            "discover_now": "Discover now",
+            "new_film": "New movies:",
+            "new_tvs": "New shows:",
+            "currently_available": "Currently available in Jellyfin:",
+            "movies_label": "Movies",
+            "episodes_label": "Episodes",
+            "footer_label": "You are receiving this email because you are using ${owner_name}'s Jellyfin server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
+            "added_on": "Added on"
+        },
+        "fr": {
+            "discover_now": "Découvrir maintenant",
+            "new_film": "Nouveaux films :",
+            "new_tvs": "Nouvelles séries :",
+            "currently_available": "Actuellement disponible sur Jellyfin :",
+            "movies_label": "Films",
+            "episodes_label": "Épisodes",
+            "footer_label": "Vous recevez cet email car vous utilisez le serveur Jellyfin de ${owner_name}. Si vous ne souhaitez plus recevoir ces emails, vous pouvez vous désinscrire en notifiant ${unsubscribe_email}.",
+            "added_on": "Ajouté le"
+        }
     },
-    "fr":{
-        "discover_now": "Découvrir maintenant",
-        "new_film": "Nouveaux films :",
-        "new_tvs": "Nouvelles séries :",
-        "currently_available": "Actuellement disponible sur Jellyfin :",
-        "movies_label": "Films",
-        "episodes_label": "Épisodes",
-        "footer_label":"Vous recevez cet email car vous utilisez le serveur Jellyfin de ${jellyfin_owner_name}. Si vous ne souhaitez plus recevoir ces emails, vous pouvez vous désinscrire en notifiant ${unsubscribe_email}.",
-        "added_on": "Ajouté le"
+    "emby": {
+        "en": {
+            "discover_now": "Discover now",
+            "new_film": "New movies:",
+            "new_tvs": "New shows:",
+            "currently_available": "Currently available in Emby:",
+            "movies_label": "Movies",
+            "episodes_label": "Episodes",
+            "footer_label": "You are receiving this email because you are using ${owner_name}'s Emby server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
+            "added_on": "Added on"
+        },
+        "fr": {
+            "discover_now": "Découvrir maintenant",
+            "new_film": "Nouveaux films :",
+            "new_tvs": "Nouvelles séries :",
+            "currently_available": "Actuellement disponible sur Emby :",
+            "movies_label": "Films",
+            "episodes_label": "Épisodes",
+            "footer_label": "Vous recevez cet email car vous utilisez le serveur Emby de ${owner_name}. Si vous ne souhaitez plus recevoir ces emails, vous pouvez vous désinscrire en notifiant ${unsubscribe_email}.",
+            "added_on": "Ajouté le"
+        }
     }
 }
 
 def populate_email_template(movies, series, total_tv, total_movie) -> str:
-    with open("./template/new_media_notification.html") as template_file:
-        template = template_file.read()
+    server_type = configuration.conf.server_type.lower()
+    template_file = f"./template/new_media_notification_{server_type}.html"
+    if not os.path.exists(template_file):
+        raise Exception(f"Template for {server_type} not found: {template_file}")
+
+    with open(template_file) as template_file_handle:
+        template = template_file_handle.read()
         
-        if configuration.conf.email_template.language in ["fr", "en"]:
-            for key in translation[configuration.conf.email_template.language]:
+        lang = configuration.conf.email_template.language
+        if lang in ["fr", "en"]:
+            for key in translation[server_type][lang]:
                 template = re.sub(
                     r"\${" + key + "}", 
-                    translation[configuration.conf.email_template.language][key], 
+                    translation[server_type][lang][key], 
                     template
                 )
         else:
-            raise Exception(f"[FATAL] Language {configuration.conf.email_template.language} not supported. Supported languages are fr and en")
+            raise Exception(f"[FATAL] Language {lang} not supported. Supported languages are fr and en")
+
+        # Pick the correct url and owner name based on server_type
+        if server_type == "jellyfin":
+            server_url = configuration.conf.email_template.jellyfin_url
+            owner_name = configuration.conf.email_template.jellyfin_owner_name
+        else:
+            server_url = getattr(configuration.conf.email_template, "emby_url", configuration.conf.emby.url)
+            owner_name = getattr(configuration.conf.email_template, "emby_owner_name", "Admin")
 
         custom_keys = [
             {"key": "title", "value": configuration.conf.email_template.title.format_map(context.placeholders)}, 
             {"key": "subtitle", "value": configuration.conf.email_template.subtitle.format_map(context.placeholders)},
-            {"key": "jellyfin_url", "value": configuration.conf.email_template.jellyfin_url},
-            {"key": "jellyfin_owner_name", "value": configuration.conf.email_template.jellyfin_owner_name.format_map(context.placeholders)},
+            {"key": "server_url", "value": server_url},
+            {"key": "owner_name", "value": owner_name.format_map(context.placeholders) if hasattr(owner_name, 'format_map') else owner_name},
             {"key": "unsubscribe_email", "value": configuration.conf.email_template.unsubscribe_email.format_map(context.placeholders)}
         ]
         
@@ -69,7 +109,7 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                                     <div class="mobile-text-container">
                                         <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
                                         <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
-                                            {translation[configuration.conf.email_template.language]['added_on']} {added_date}
+                                            {translation[server_type][lang]['added_on']} {added_date}
                                         </div>
                                         <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
                                             {movie_data['description']}
@@ -106,7 +146,7 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                                     <div class="mobile-text-container">
                                         <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
                                         <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
-                                            {translation[configuration.conf.email_template.language]['added_on']} {added_date}
+                                            {translation[server_type][lang]['added_on']} {added_date}
                                         </div>
                                         <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
                                             {serie_data['description']}
