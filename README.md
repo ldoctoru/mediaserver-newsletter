@@ -67,7 +67,7 @@ It is fully customizable and can be run on a schedule using the built-in cron jo
 services:
   mediaserver-newsletter:
     container_name: mediaserver-newsletter
-    image: ghcr.io/ldoctoru/mediaserver-newsletter:latest
+    image: ghcr.io/ldoctoru/mediaserver-newsletter:1.0.0
     environment:
       USER_UID: 1000
       USER_GID: 1000
