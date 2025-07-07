@@ -1,4 +1,4 @@
-server_type: "jellyfin"     # or "emby"
+server_type: "emby"     # or "emby"
 jellyfin:
   url: "http://your-jellyfin-server:8096"
   api_token: ""
