@@ -7,56 +7,83 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 
-
-def populate_series_item(series_items, item):
-    if "DateCreated" not in item.keys():
-        logging.warning(f"Item {item['SeriesName']} has no creation date.")
-        item["DateCreated"] = None
-    if "ProductionYear" not in item.keys():
-        logging.warning(f"Item {item['SeriesName']} has no production year.")
-        item["ProductionYear"] = 0
-
-    tmdb_id = None
-    if "ProviderIds" in item.keys():
-        if "Tmdb" in item["ProviderIds"].keys():
-            tmdb_id = item["ProviderIds"]["Tmdb"]
-
-    if tmdb_id is not None: # id provided by Jellyfin
-        tmdb_info = TmdbAPI.get_media_detail_from_id(id=tmdb_id, type="tv")
-    else:
-        logging.info(f"Item {item['SeriesName']} has no TMDB id, searching by title.")
-        tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["SeriesName"], type="tv", year=item["ProductionYear"])
-
-    if tmdb_info is None:
-        logging.warning(f"Item {item['Name']} has not been found on TMDB. Skipping.")
-    else:
-        if item['Name'] not in series_items.keys():
-            series_items[item['Name']] = {
-                "is_serie_item_initialized": True,
-            }
-        series_items[item['Name']]["created_on"] = item["DateCreated"]
-        if "seasons" not in series_items[item['Name']].keys():
-            series_items[item['Name']]["seasons"] = []
-        if "overview" not in tmdb_info.keys():
-            logging.warning(f"Item {item['SeriesName']} has no overview.")
-            tmdb_info["Overview"] = "No overview available."
-        series_items[item['Name']]["description"] = tmdb_info["overview"]
-        series_items[item['Name']]["year"] = item["ProductionYear"]
-        series_items[item['Name']]["poster"] = f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
-
-def catch_undefined_series(series_items, watched_tv_folders_id):
+def populate_series_item_from_episode(series_items, item):
     """
-    This script only search for items created within the defined past days. 
-    If a series has been created before that period, but episodes have been created during this period, the series will appear with missing information in the newsletter.
-    To catch this case, we will parse the final series_item array and verify that no series is missing information.
+    Populate the series item with required information to build the email content. 
+    It takes an episode, populate the serie item with the episode information, and add the episode to the series item.
+    series_items format : 
+    {
+        "SeriesName": {
+            "created_on": "2023-10-01T12:00:00Z", # Creation date of the series item, i.e. of added season or the added episode, or the series itfself
+            "description": "This is a series description.", # Since episode rarely includes TMBD id, even if the episode is alone, we will use the series description.
+            "year": 2023, # Production year of the series, provided by Jellyfin
+            "poster": "", # Poster of the series, provided by TMDB
+            "seasons": [""] # List of seasons in the series, provided by Jellyfin
+            "episodes" : [""]
+        }
+    }
+    """
+
+
+    
+    if "SeriesName" not in item.keys():
+        logging.warning(f"Item {item['Name']} has no SeriesName. Skipping.")
+        return
+    if item["SeriesName"] not in series_items.keys():
+        series_items[item["SeriesName"]] = {
+            "episodes": [],
+            "seasons": [],
+            "created_on": "undefined",
+            "description": "No description available.",  # will be populated later, when parsing the series item
+            "year": "undefined",# will be populated later, when parsing the series item
+            "poster": "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"# will be populated later, when parsing the series item
+        }
+    if item["SeasonName"] not in series_items[item["SeriesName"]]["seasons"]:
+        series_items[item["SeriesName"]]["seasons"].append(item["SeasonName"])
+    series_items[item["SeriesName"]]["episodes"].append(f"Ep{item.get('IndexNumber')}")
+    if series_items[item["SeriesName"]]["created_on"] != "undefined" or series_items[item["SeriesName"]]["created_on"] is not None:
+        try: 
+            if dt.datetime.fromisoformat(series_items[item["SeriesName"]]["created_on"]) < dt.datetime.fromisoformat(item["DateCreated"]):
+                series_items[item["SeriesName"]]["created_on"] = item["DateCreated"]
+        except:
+            pass
+    series_items[item["SeriesName"]]["created_on"] = item.get("DateCreated", "undefined") 
+
+
+def populate_series_item_with_series_related_information(series_items, watched_tv_folders_id):
+    """
+    populate_series_item_from_episode will populate the series item with the episode information, but it will not include the series information (description, year, poster).
+    This function will populate the series item with the series information.
     """
     for folder_id in watched_tv_folders_id:
         for serie_name in series_items.keys():
-            if not series_items[serie_name]["is_serie_item_initialized"]:
-                item = JellyfinAPI.get_item_from_parent_by_name(parent_id=folder_id, name=serie_name)
-                if item is not None:
-                    populate_series_item(series_items, item)
+            item = JellyfinAPI.get_item_from_parent_by_name(parent_id=folder_id, name=serie_name)
+            if item is not None:
+                series_items[item['Name']]["year"] = item["ProductionYear"]
+                tmdb_id = None
+                if "ProviderIds" in item.keys():
+                    if "Tmdb" in item["ProviderIds"].keys():
+                        tmdb_id = item["ProviderIds"]["Tmdb"]
+    
+                if tmdb_id is not None: # id provided by Jellyfin
+                    tmdb_info = TmdbAPI.get_media_detail_from_id(id=tmdb_id, type="tv")
+                else:
+                    logging.info(f"Item {item['SeriesName']} has no TMDB id, searching by title.")
+                    tmdb_info = TmdbAPI.get_media_detail_from_title(title=item["SeriesName"], type="tv", year=item["ProductionYear"])
+                
+                if tmdb_info is None:
+                    logging.warning(f"Item {item['Name']} has not been found on TMDB. Skipping.")
+                else:
+                    if "overview" not in tmdb_info.keys():
+                        logging.warning(f"Item {item['SeriesName']} has no overview.")
+                        tmdb_info["Overview"] = "No overview available."
+                    series_items[item['Name']]["description"] = tmdb_info["overview"]
                     
+                    series_items[item['Name']]["poster"] = f"https://image.tmdb.org/t/p/w500{tmdb_info['poster_path']}" if tmdb_info["poster_path"] else "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
+            else:
+                logging.warning(f"Item {serie_name} has not been found in Jellyfin. Skipping.")
+
+    
 
 
 def send_newsletter():
@@ -121,23 +148,12 @@ def send_newsletter():
         items, total_count = JellyfinAPI.get_item_from_parent(parent_id=folder_id, type="tv", minimum_creation_date=dt.datetime.now() - dt.timedelta(days=configuration.conf.jellyfin.observed_period_days))
         total_tv += total_count
         for item in items:
-            if item["Type"] == "Series":
-                populate_series_item(series_items, item)
-            elif item["Type"] == "Episode":
-                if (item['SeriesName'] in series_items.keys() and item["SeasonName"] not in series_items[item["SeriesName"]]["seasons"] ) or (item['SeriesName'] not in series_items.keys()):
-                    if item['SeriesName'] not in series_items.keys():
-                        series_items[item['SeriesName']] = {
-                            "seasons": [],
-                            "is_serie_item_initialized": False,
-                            "created_on": "undefined",
-                            "description": "No description available.",
-                            "year": "undefined",
-                            "poster": "https://redthread.uoregon.edu/files/original/affd16fd5264cab9197da4cd1a996f820e601ee4.png"
-                        }
-                    series_items[item['SeriesName']]["seasons"].append(item["SeasonName"])
-
+            if item["Type"] == "Episode":
+                populate_series_item_from_episode(series_items, item)
+    
             
-    catch_undefined_series(series_items=series_items, watched_tv_folders_id=watched_tv_folders_id)
+    populate_series_item_with_series_related_information(series_items=series_items, watched_tv_folders_id=watched_tv_folders_id)
+    logging.debug("Series populated : " + str(series_items))
     template = email_template.populate_email_template(movies=movie_items, series=series_items, total_tv=total_tv, total_movie=total_movie)
 
 
