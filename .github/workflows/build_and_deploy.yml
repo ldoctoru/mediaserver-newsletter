@@ -3,7 +3,7 @@ name: "Mediaserver-newsletter docker image deployment"
 on:
   push:
     tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'main'
 
 jobs:
   security_test:
