@@ -18,6 +18,8 @@ jobs:
       GHCR_IMAGE: ghcr.io/${{ secrets.USERNAME }}/mediaserver-newsletter
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Needed to ensure all refs are present for branch checkout
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -59,6 +61,9 @@ jobs:
         run: |
           current_version=$(echo ${{ github.ref_name }} | sed 's/v\([0-9]*\.[0-9]*\.[0-9]*\).*/\1/')
           sed -i "s|\(ghcr.io/${{ secrets.USERNAME }}/mediaserver-newsletter:\).*|ghcr.io/${{ secrets.USERNAME }}/mediaserver-newsletter:$current_version|g" README.md
+
+      - name: Checkout main branch for commit
+        run: git checkout main
 
       - name: Commit and push README.md if changed
         run: |
