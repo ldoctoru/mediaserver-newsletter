@@ -11,7 +11,7 @@ translation = {
         "movies_label": "Movies",
         "episodes_label": "Episodes",
         "footer_label":"You are recieving this email because you are using ${jellyfin_owner_name}'s Jellyfin server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
-        "added_on": "Added on"
+        "added_on": "Added on",
     },
     "fr":{
         "discover_now": "Découvrir maintenant",
@@ -21,11 +21,12 @@ translation = {
         "movies_label": "Films",
         "episodes_label": "Épisodes",
         "footer_label":"Vous recevez cet email car vous utilisez le serveur Jellyfin de ${jellyfin_owner_name}. Si vous ne souhaitez plus recevoir ces emails, vous pouvez vous désinscrire en notifiant ${unsubscribe_email}.",
-        "added_on": "Ajouté le"
+        "added_on": "Ajouté le",
     }
 }
 
 def populate_email_template(movies, series, total_tv, total_movie) -> str:
+    include_overview = len(movies) + len(series) <= 5
     with open("./template/new_media_notification.html") as template_file:
         template = template_file.read()
         
@@ -57,6 +58,13 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
             
             for movie_title, movie_data in movies.items():
                 added_date = movie_data["created_on"].split("T")[0]
+                item_overview_html = ""
+                if include_overview:
+                    item_overview_html = f"""
+<div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
+                                            {movie_data['description']}
+</div>
+"""
                 movies_html += f"""
                 <div class="movie_container" style="margin-bottom: 15px;">
                     <div class="movie_bg" style="background: url('{movie_data['poster']}') no-repeat center center; background-size: cover; border-radius: 10px;">
@@ -71,9 +79,7 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                                         <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
                                             {translation[configuration.conf.email_template.language]['added_on']} {added_date}
                                         </div>
-                                        <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
-                                            {movie_data['description']}
-                                        </div>
+                                        {item_overview_html}
                                     </div>
                                 </td>
                             </tr>
@@ -93,7 +99,21 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
             
             for serie_title, serie_data in series.items():
                 added_date = serie_data["created_on"].split("T")[0]
-                seasons_str = ", ".join(serie_data["seasons"])
+                if len(serie_data["seasons"]) == 1 and len(serie_data["episodes"]) <= 5:
+                    if len(serie_data["episodes"]) == 1:
+                        added_items_str = serie_data["seasons"][0] +  " " +  serie_data["episodes"][0] 
+                    else:
+                        added_items_str = serie_data["seasons"][0] +  " " +  ", ".join(serie_data["episodes"][:-1]) + " & " + serie_data["episodes"][-1] 
+                else:
+                    added_items_str = ", ".join(serie_data["seasons"])
+
+                item_overview_html = ""
+                if include_overview:
+                    item_overview_html = f"""
+<div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
+                                            {serie_data['description']}
+                                        </div>
+"""
                 series_html += f"""
                 <div class="movie_container" style="margin-bottom: 15px;">
                     <div class="movie_bg" style="background: url('{serie_data['poster']}') no-repeat center center; background-size: cover; border-radius: 10px;">
@@ -104,13 +124,11 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                                 </td>
                                 <td class="movie-content-cell" valign="top" style="padding: 15px;">
                                     <div class="mobile-text-container">
-                                        <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} {seasons_str}</h3>
+                                        <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title} : {added_items_str}</h3>
                                         <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
                                             {translation[configuration.conf.email_template.language]['added_on']} {added_date}
                                         </div>
-                                        <div class="movie-description" style="color: #dddddd !important; font-size: 14px !important; line-height: 1.4 !important;">
-                                            {serie_data['description']}
-                                        </div>
+                                        {item_overview_html}
                                     </div>
                                 </td>
                             </tr>
