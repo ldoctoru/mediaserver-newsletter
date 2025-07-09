@@ -7,8 +7,8 @@ def check_jellyfin_configuration():
     
     # Jellyfin URL
     parsed_url = urlparse(conf.jellyfin.url)
-    assert parsed_url.scheme != '', "[FATAL] Invalid Jellyfin URL. The URL must contain the scheme (e.g. http:// or https://). Please check the configuration."
-    assert parsed_url.netloc != '', "[FATAL] Invalid Jellyfin URL. The URL must contain a valid host (e.g. example.com or 127.0.0.1:80). Please check the configuration."
+    assert parsed_url.scheme != '', f"[FATAL] Invalid Jellyfin URL. The URL must contain the scheme (e.g. http:// or https://). Please check the configuration. Got {conf.jellyfin.url}. Parsed : {parsed_url}"
+    assert parsed_url.netloc != '', f"[FATAL] Invalid Jellyfin URL. The URL must contain a valid host (e.g. example.com or 127.0.0.1:80). Please check the configuration. Got {conf.jellyfin.url}. Parsed : {parsed_url}"
 
     # Jellyfin API token
     assert isinstance(conf.jellyfin.api_token, str), "[FATAL] Invalid Jellyfin API token. The API token must be a string. Please check the configuration."
