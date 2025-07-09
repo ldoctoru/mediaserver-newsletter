@@ -1,10 +1,7 @@
 import yaml
 import logging
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
-)
+
 
 
 class Scheduler:
@@ -87,11 +84,19 @@ class Config:
             if key not in data:
                 logging.error(f"[FATAL] Load config fail. Was expecting the key {key}")
                 exit(1)
+
+        if "debug" in data: 
+            if data["debug"]:
+                logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+            else:
+                logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+        else: 
+            logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
     
         self.jellyfin = Jellyfin(data["jellyfin"])
         self.tmdb = Tmdb(data["tmdb"])
         self.email_template = EmailTemplate(data["email_template"])
-        self.email = Email(data["email"])
+        self.email = Email(data["email"]) 
         self.recipients = data["recipients"]
         self.scheduler = Scheduler(data["scheduler"]) if "scheduler" in data else Scheduler([])
     
