@@ -188,8 +188,7 @@ if __name__ == "__main__":
 Jellyfin Newsletter is starting ....
 ##############################################
 
-WARNING : This version includes breaking changes. 
-Make sure to review breaking changes in https://github.com/SeaweedbrainCY/jellyfin-newsletter/releases before running the newsletter.
+
 
 """)
     logging.info("Checking configuration ...")
