@@ -23,7 +23,7 @@ fi
 if  [ ! -f /app/config/config.yml ] && [ ! -f /app/config/config.yaml ]; then
     echo "Config file not found. Generating default config."
     cp /app/default/config-example.yml /app/config/config.yml 
-    cp /app/default/config-example.yml /app/config/config-example.yaml
+    cp /app/default/config-example.yml /app/config/config-example.yml
 fi
 
 chown -R $USER_UID:$USER_GID /app/config/
