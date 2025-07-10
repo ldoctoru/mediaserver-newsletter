@@ -40,7 +40,7 @@ def populate_series_item_from_episode(series_items, item):
         }
     if item["SeasonName"] not in series_items[item["SeriesName"]]["seasons"]:
         series_items[item["SeriesName"]]["seasons"].append(item["SeasonName"])
-    series_items[item["SeriesName"]]["episodes"].append(f"Ep{item.get('IndexNumber')}")
+    series_items[item["SeriesName"]]["episodes"].append(item.get('IndexNumber'))
     if series_items[item["SeriesName"]]["created_on"] != "undefined" or series_items[item["SeriesName"]]["created_on"] is not None:
         try: 
             if dt.datetime.fromisoformat(series_items[item["SeriesName"]]["created_on"]) < dt.datetime.fromisoformat(item["DateCreated"]):

@@ -1,6 +1,5 @@
-from source import configuration
+from source import configuration, context, utils
 import re
-from source import context
 
 translation = {
     "en":{
@@ -12,6 +11,8 @@ translation = {
         "episodes_label": "Episodes",
         "footer_label":"You are recieving this email because you are using ${jellyfin_owner_name}'s Jellyfin server. If you want to stop receiving these emails, you can unsubscribe by notifying ${unsubscribe_email}.",
         "added_on": "Added on",
+        "episodes": "Episodes",
+         "episode": "Episode",
     },
     "fr":{
         "discover_now": "Découvrir maintenant",
@@ -22,6 +23,8 @@ translation = {
         "episodes_label": "Épisodes",
         "footer_label":"Vous recevez cet email car vous utilisez le serveur Jellyfin de ${jellyfin_owner_name}. Si vous ne souhaitez plus recevoir ces emails, vous pouvez vous désinscrire en notifiant ${unsubscribe_email}.",
         "added_on": "Ajouté le",
+        "episodes": "Épisodes",
+        "episode": "Épisode",
     }
 }
 
@@ -73,10 +76,10 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                     <div class="movie_bg" style="background: url('{movie_data['poster']}') no-repeat center center; background-size: cover; border-radius: 10px;">
                         <table class="movie" width="100%" role="presentation" cellpadding="0" cellspacing="0" style="background: rgba(0, 0, 0, 0.7); border-radius: 10px; width: 100%;">
                             <tr>
-                                <td class="movie-image" valign="top" style="padding: 15px; text-align: center; width: 120px;">
+                                <td class="movie-image" valign="middle" style="padding: 15px; text-align: center; width: 120px;">
                                     <img src="{movie_data['poster']}" alt="{movie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
                                 </td>
-                                <td class="movie-content-cell" valign="top" style="padding: 15px;">
+                                <td class="movie-content-cell" valign="middle" style="padding: 15px;">
                                     <div class="mobile-text-container">
                                         <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{movie_title}</h3>
                                         <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
@@ -102,13 +105,17 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
             
             for serie_title, serie_data in series.items():
                 added_date = serie_data["created_on"].split("T")[0]
-                if len(serie_data["seasons"]) == 1 and len(serie_data["episodes"]) <= 5:
+                if len(serie_data["seasons"]) == 1 :
                     if len(serie_data["episodes"]) == 1:
-                        added_items_str = serie_data["seasons"][0] +  " " +  serie_data["episodes"][0] 
+                        added_items_str = f"{serie_data['seasons'][0]}, {translation[configuration.conf.email_template.language]['episode']} {serie_data['episodes'][0]}"
                     else:
-                        added_items_str = serie_data["seasons"][0] +  " " +  ", ".join(serie_data["episodes"][:-1]) + " & " + serie_data["episodes"][-1] 
+                        episodes_ranges = utils.summarize_ranges(serie_data["episodes"])
+                        if len(episodes_ranges) == 1:
+                            added_items_str = f"{serie_data['seasons'][0]}, {translation[configuration.conf.email_template.language]['episodes']} {episodes_ranges[0]}"
+                        else:
+                            added_items_str = f"{serie_data['seasons'][0]}, {translation[configuration.conf.email_template.language]['episodes']} {', '.join(episodes_ranges[:-1])} & {episodes_ranges[-1]}"
                 else:
-                    added_items_str = ", ".join(serie_data["seasons"])
+                    added_items_str = ", ".join(serie_data["seasons"].sort())
 
                 item_overview_html = ""
                 if include_overview:
@@ -122,10 +129,10 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                     <div class="movie_bg" style="background: url('{serie_data['poster']}') no-repeat center center; background-size: cover; border-radius: 10px;">
                         <table class="movie" width="100%" role="presentation" cellpadding="0" cellspacing="0" style="background: rgba(0, 0, 0, 0.7); border-radius: 10px; width: 100%;">
                             <tr>
-                                <td class="movie-image" valign="top" style="padding: 15px; text-align: center; width: 120px;">
+                                <td class="movie-image" valign="middle" style="padding: 15px; text-align: center; width: 120px;">
                                     <img src="{serie_data['poster']}" alt="{serie_title}" style="max-width: 100px; height: auto; display: block; margin: 0 auto;">
                                 </td>
-                                <td class="movie-content-cell" valign="top" style="padding: 15px;">
+                                <td class="movie-content-cell" valign="middle" style="padding: 15px;">
                                     <div class="mobile-text-container">
                                         <h3 class="movie-title" style="color: #ffffff !important; margin: 0 0 5px !important; font-size: 18px !important;">{serie_title}: {added_items_str}</h3>
                                         <div class="movie-date" style="color: #dddddd !important; font-size: 14px !important; margin: 0 0 10px !important;">
