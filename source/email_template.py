@@ -26,7 +26,10 @@ translation = {
 }
 
 def populate_email_template(movies, series, total_tv, total_movie) -> str:
-    include_overview = len(movies) + len(series) <= 5
+    include_overview = True
+    if len(movies) + len(series) > 10 :
+        include_overview = False
+        configuration.logging.info("There are more than 10 new items, overview will not be included in the email template to avoid too much content.")
     with open("./template/new_media_notification.html") as template_file:
         template = template_file.read()
         
