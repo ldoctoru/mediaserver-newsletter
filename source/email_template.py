@@ -115,7 +115,8 @@ def populate_email_template(movies, series, total_tv, total_movie) -> str:
                         else:
                             added_items_str = f"{serie_data['seasons'][0]}, {translation[configuration.conf.email_template.language]['episodes']} {', '.join(episodes_ranges[:-1])} & {episodes_ranges[-1]}"
                 else:
-                    added_items_str = ", ".join(serie_data["seasons"].sort())
+                    serie_data["seasons"].sort()
+                    added_items_str = ", ".join(serie_data["seasons"])
 
                 item_overview_html = ""
                 if include_overview:
