@@ -154,18 +154,25 @@ def send_newsletter():
             
     populate_series_item_with_series_related_information(series_items=series_items, watched_tv_folders_id=watched_tv_folders_id)
     logging.debug("Series populated : " + str(series_items))
-    template = email_template.populate_email_template(movies=movie_items, series=series_items, total_tv=total_tv, total_movie=total_movie)
+    if len(movie_items) + len(series_items) > 0:
+        template = email_template.populate_email_template(movies=movie_items, series=series_items, total_tv=total_tv, total_movie=total_movie)
 
 
-    email_controller.send_email(template)
+        email_controller.send_email(template)
 
-    logging.info("""All emails sent.
+        logging.info("All emails sent.")
+    else:
+        logging.warning("No new items found in watched folders. No email sent.")
     
-    
+    logging.info("""
+
+
 ##############################################
 Newsletter sent. 
 Thanks for using Jellyfin Newsletter!
 Developed by Seaweedbrain, under MIT License.""")
+
+
 
 
 
