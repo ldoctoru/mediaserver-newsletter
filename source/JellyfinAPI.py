@@ -32,6 +32,10 @@ def get_item_from_parent(parent_id, type, minimum_creation_date=None):
     else:
         recent_items = []
         for item in response.json()["Items"]:
+            if (item.get("Type") == "Episode" and item.get("LocationType") == "Virtual") or (item.get("Type") == "Movie" and item.get("LocationType") == "Virtual"):
+                # see https://github.com/SeaweedbrainCY/jellyfin-newsletter/issues/28 for context
+                logging.debug(f"Skipping item {item['Name']} because it is a virtual item. Item : {item}")
+                continue
             creation_date = dt.datetime.strptime(item["DateCreated"].split("T")[0], "%Y-%m-%d")
             if creation_date > minimum_creation_date:
                 logging.debug(f"Item {item['Name']} is more recent than {minimum_creation_date} (added on {creation_date}). Adding it to the list.")
