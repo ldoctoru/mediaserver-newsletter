@@ -28,6 +28,3 @@ def summarize_ranges(nums):
         result.append(f"{start}-{end}")
 
     return result
-
-
-print(" ,".join(summarize_ranges([0, 1, 2, 4, 5, 7])))
