@@ -1,6 +1,11 @@
+import os
 import yaml
 import logging
-import os
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 class Scheduler:
     def __init__(self, data):
@@ -20,13 +25,24 @@ class Scheduler:
             except:
                 pass
 
-class ServerBase:
+class Jellyfin:
     required_keys = ["url", "api_token", "watched_film_folders", "watched_tv_folders", "observed_period_days"]
-
-    def __init__(self, data, label):
+    def __init__(self, data):
         for key in self.required_keys:
             if key not in data:
-                raise Exception(f"[FATAL] Load config fail. Was expecting the key {label}.{key}")
+                raise Exception(f"[FATAL] Load config fail. Was expecting the key jellyfin.{key}")
+        self.url = data["url"]
+        self.api_token = data["api_token"]
+        self.watched_film_folders = data["watched_film_folders"]
+        self.watched_tv_folders = data["watched_tv_folders"]
+        self.observed_period_days = data["observed_period_days"]
+
+class Emby:
+    required_keys = ["url", "api_token", "watched_film_folders", "watched_tv_folders", "observed_period_days"]
+    def __init__(self, data):
+        for key in self.required_keys:
+            if key not in data:
+                raise Exception(f"[FATAL] Load config fail. Was expecting the key emby.{key}")
         self.url = data["url"]
         self.api_token = data["api_token"]
         self.watched_film_folders = data["watched_film_folders"]
@@ -42,7 +58,7 @@ class Tmdb:
         self.api_key = data["api_key"]
 
 class EmailTemplate:
-    required_keys = ["language", "subject", "title", "subtitle", "jellyfin_url", "unsubscribe_email", "jellyfin_owner_name"]
+    required_keys = ["language","subject","title","subtitle","jellyfin_url","unsubscribe_email","jellyfin_owner_name"]
     def __init__(self, data):
         for key in self.required_keys:
             if key not in data:
@@ -51,7 +67,7 @@ class EmailTemplate:
         self.subject = data["subject"]
         self.title = data["title"]
         self.subtitle = data["subtitle"]
-        self.jellyfin_url = data["jellyfin_url"].rstrip("/")
+        self.jellyfin_url = data["jellyfin_url"]
         self.unsubscribe_email = data["unsubscribe_email"]
         self.jellyfin_owner_name = data["jellyfin_owner_name"]
 
@@ -68,40 +84,35 @@ class Email:
         self.smtp_sender_email = data["smtp_sender_email"]
 
 class Config:
-    required_keys = ["server_type", "tmdb", "email_template", "email", "recipients"]
+    required_keys = ["server_type", "jellyfin", "emby", "tmdb", "email_template", "email", "recipients"]
     def __init__(self, data):
         for key in self.required_keys:
             if key not in data:
-                raise Exception(f"[FATAL] Load config fail. Was expecting the key {key}")
-        if data["server_type"] not in ["jellyfin", "emby"]:
-            raise Exception(f"[FATAL] Invalid server_type: {data['server_type']}. Must be 'jellyfin' or 'emby'")
-        
-        self.server_type = data["server_type"]
+                logging.error(f"[FATAL] Load config fail. Was expecting the key {key}")
+                exit(1)
 
-        if self.server_type == "jellyfin":
-            if "jellyfin" not in data:
-                raise Exception("[FATAL] Load config fail. jellyfin config is missing.")
-            self.jellyfin = ServerBase(data["jellyfin"], "jellyfin")
-        else:
-            if "emby" not in data:
-                raise Exception("[FATAL] Load config fail. emby config is missing.")
-            self.emby = ServerBase(data["emby"], "emby")
+        # Allow override by environment variable
+        server_type = os.getenv("SERVER_TYPE", data.get("server_type", "")).lower()
+        if server_type not in ["jellyfin", "emby"]:
+            logging.error('Please set "server_type" to "jellyfin" or "emby" in config.yml or as SERVER_TYPE env variable.')
+            exit(1)
+        self.server_type = server_type
 
-        if "debug" in data and data["debug"]:
-            logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(levelname)s - %(message)s")
-        else:
-            logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-
+        self.jellyfin = Jellyfin(data["jellyfin"])
+        self.emby = Emby(data["emby"])
         self.tmdb = Tmdb(data["tmdb"])
         self.email_template = EmailTemplate(data["email_template"])
         self.email = Email(data["email"])
         self.recipients = data["recipients"]
-        self.scheduler = Scheduler(data["scheduler"]) if "scheduler" in data else Scheduler(None)
+        self.scheduler = Scheduler(data["scheduler"]) if "scheduler" in data else Scheduler([])
 
-# Load config
+# Load and validate config at module import
 try:
-    with open(os.environ.get("CONFIG_PATH", "./config/config.yml")) as config_file:
-        raw_conf = yaml.safe_load(config_file)
-        conf = Config(raw_conf)
+    with open("./config/config.yml") as config_yml:
+        try:
+            raw_conf = yaml.safe_load(config_yml)
+            conf = Config(raw_conf)
+        except yaml.YAMLError as exc:
+            raise Exception(exc)
 except Exception as e:
-    raise Exception(f"[FATAL] API will stop now. Error while checking config file: {e}")
+    raise Exception(f"[FATAL] API will stop now. Error while checking config file, {e}")
