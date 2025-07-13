@@ -1,6 +1,5 @@
 #! /bin/bash 
 
-
 ####
 # Pre-execution set up 
 # User: root
@@ -20,10 +19,21 @@ if [ "$USER_GID" = "" ]; then
 fi
 
 # Check if config file exists
-if  [ ! -f /app/config/config.yml ] && [ ! -f /app/config/config.yaml ]; then
-    echo "Config file not found. Generating default config."
+
+if [ -f /app/config/config.yaml ] && [ ! -f /app/config/config.yml ]; then
+    echo "config.yaml found, renaming to config.yml"
+    mv /app/config/config.yaml /app/config/config.yml
+fi
+
+
+if  [ ! -f /app/config/config.yml ]; then
+    echo "WARNING. Config file not found. Generating default config."
     cp /app/default/config-example.yml /app/config/config.yml 
-    cp /app/default/config-example.yml /app/config/config-example.yaml
+    cp /app/default/config-example.yml /app/config/config-example.yml
+    echo "Config file generated at /app/config/config.yml"
+    echo "Please edit the config file before running the application."
+    echo "Refer to the documentation for more information."
+    exit 1
 fi
 
 chown -R $USER_UID:$USER_GID /app/config/
